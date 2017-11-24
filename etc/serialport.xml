@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SerialPort>
+		<PortNode>
+			<BaudRate>230400</BaudRate>
+			<DataBit>64</DataBit>
+			<CheckDigit>8</CheckDigit>
+			<StopBit>32</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230401</BaudRate>
+			<DataBit>16</DataBit>
+			<CheckDigit>4</CheckDigit>
+			<StopBit>4</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230402</BaudRate>
+			<DataBit>32</DataBit>
+			<CheckDigit>8</CheckDigit>
+			<StopBit>16</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230403</BaudRate>
+			<DataBit>8</DataBit>
+			<CheckDigit>0</CheckDigit>
+			<StopBit>1</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230404</BaudRate>
+			<DataBit>64</DataBit>
+			<CheckDigit>8</CheckDigit>
+			<StopBit>32</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230405</BaudRate>
+			<DataBit>16</DataBit>
+			<CheckDigit>4</CheckDigit>
+			<StopBit>4</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230406</BaudRate>
+			<DataBit>32</DataBit>
+			<CheckDigit>8</CheckDigit>
+			<StopBit>16</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230407</BaudRate>
+			<DataBit>8</DataBit>
+			<CheckDigit>0</CheckDigit>
+			<StopBit>1</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230408</BaudRate>
+			<DataBit>64</DataBit>
+			<CheckDigit>8</CheckDigit>
+			<StopBit>32</StopBit>
+		</PortNode>
+		<PortNode>
+			<BaudRate>230409</BaudRate>
+			<DataBit>16</DataBit>
+			<CheckDigit>4</CheckDigit>
+			<StopBit>4</StopBit>
+		</PortNode>		
+</SerialPort>
+
+

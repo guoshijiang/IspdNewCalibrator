@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>898</width>
+    <height>649</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>录入标签</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QScrollArea" name="scrollArea_record">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>854</width>
+             <height>495</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>检测通信</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>合并测试</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGroupBox" name="groupBox_h_record">
+          <property name="title">
+           <string>录入标签</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_h_check">
+          <property name="title">
+           <string>检测通信</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>898</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="action_newfile"/>
+    <addaction name="action_openfile"/>
+    <addaction name="action_eixit"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="action_mu"/>
+    <addaction name="action_auto"/>
+    <addaction name="action_record"/>
+    <addaction name="action_com"/>
+    <addaction name="action_hb"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action_doc"/>
+    <addaction name="action_question"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="action_version"/>
+    <addaction name="action_sm"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="action_serialport_set"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_5"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_newfile"/>
+   <addaction name="separator"/>
+   <addaction name="action_openfile"/>
+   <addaction name="separator"/>
+   <addaction name="action_eixit"/>
+   <addaction name="separator"/>
+   <addaction name="action_set"/>
+   <addaction name="separator"/>
+   <addaction name="action_mu"/>
+   <addaction name="separator"/>
+   <addaction name="action_auto"/>
+   <addaction name="separator"/>
+   <addaction name="action_record"/>
+   <addaction name="separator"/>
+   <addaction name="action_com"/>
+   <addaction name="separator"/>
+   <addaction name="action_hb"/>
+   <addaction name="separator"/>
+   <addaction name="action_serialport_set"/>
+   <addaction name="separator"/>
+   <addaction name="action_doc"/>
+   <addaction name="separator"/>
+   <addaction name="action_question"/>
+   <addaction name="separator"/>
+   <addaction name="action_version"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="action_newfile">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/nf.png</normaloff>:/nf.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件</string>
+   </property>
+   <property name="toolTip">
+    <string>新建文件</string>
+   </property>
+  </action>
+  <action name="action_openfile">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/open.png</normaloff>:/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="action_set">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/set.png</normaloff>:/set.png</iconset>
+   </property>
+   <property name="text">
+    <string>设置</string>
+   </property>
+  </action>
+  <action name="action_mu">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/sd.png</normaloff>:/sd.png</iconset>
+   </property>
+   <property name="text">
+    <string>手动测试</string>
+   </property>
+  </action>
+  <action name="action_auto">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/aotu.png</normaloff>:/aotu.png</iconset>
+   </property>
+   <property name="text">
+    <string>自动测试</string>
+   </property>
+  </action>
+  <action name="action_record">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/record.png</normaloff>:/record.png</iconset>
+   </property>
+   <property name="text">
+    <string>录入标签</string>
+   </property>
+  </action>
+  <action name="action_com">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/jctest.png</normaloff>:/jctest.png</iconset>
+   </property>
+   <property name="text">
+    <string>检测通信</string>
+   </property>
+  </action>
+  <action name="action_hb">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/hbing.png</normaloff>:/hbing.png</iconset>
+   </property>
+   <property name="text">
+    <string>合并测试</string>
+   </property>
+  </action>
+  <action name="action_doc">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/operationfile.png</normaloff>:/operationfile.png</iconset>
+   </property>
+   <property name="text">
+    <string>操作文档</string>
+   </property>
+  </action>
+  <action name="action_question">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/question.png</normaloff>:/question.png</iconset>
+   </property>
+   <property name="text">
+    <string>常见问题</string>
+   </property>
+  </action>
+  <action name="action_version">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/version.png</normaloff>:/version.png</iconset>
+   </property>
+   <property name="text">
+    <string>版本</string>
+   </property>
+  </action>
+  <action name="action_sm">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/versions.png</normaloff>:/versions.png</iconset>
+   </property>
+   <property name="text">
+    <string>版本说明</string>
+   </property>
+  </action>
+  <action name="action_serialport_set">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/sportset.png</normaloff>:/sportset.png</iconset>
+   </property>
+   <property name="text">
+    <string>串口通信设置</string>
+   </property>
+  </action>
+  <action name="action_eixit">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/exit.png</normaloff>:/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>nf.png</file>
+        <file>open.png</file>
+        <file>aotu.png</file>
+        <file>hbing.png</file>
+        <file>jctest.png</file>
+        <file>record.png</file>
+        <file>sd.png</file>
+        <file>set.png</file>
+        <file>operationfile.png</file>
+        <file>question.png</file>
+        <file>version.png</file>
+        <file>versions.png</file>
+        <file>sportset.png</file>
+        <file>exit.png</file>
+    </qresource>
+</RCC>
