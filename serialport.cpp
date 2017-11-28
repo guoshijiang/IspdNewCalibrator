@@ -1,108 +1,226 @@
-﻿/*
-#include "serialport.h"
+﻿#include "SerialPort.h"
+#include <process.h>
+#include <iostream>
 
-SerialPort::SerialPort(size_t rsize, size_t wsize) : read_buffer_cap_(rsize), read_time_out_(3), write_time_out_(3)
+bool SerialPort::s_bExit = false;
+
+const UINT SLEEP_TIME_INTERVAL = 5;
+
+SerialPort::SerialPort(void) : m_hListenThread(INVALID_HANDLE_VALUE)
 {
-    this->read_buffer_ = new unsigned char(rsize);
+    m_hComm = INVALID_HANDLE_VALUE;
+    m_hListenThread = INVALID_HANDLE_VALUE;
+    InitializeCriticalSection(&m_csCommunicationSync);
 }
 
-SerialPort::~SerialPort()
+SerialPort::~SerialPort(void)
 {
-    this->Close();
+    CloseListenTread();
+    ClosePort();
+    DeleteCriticalSection(&m_csCommunicationSync);
 }
 
-int SerialPort::Open(const char* name)
+bool SerialPort::InitPort(UINT portNo, UINT baud, char parity, UINT databits, UINT stopsbits, DWORD dwCommEvents)
 {
-    this->handle_ = CreateFile(name, GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL );
-    if (INVALID_HANDLE_VALUE == this->handle_)
+    DCB  dcb;
+    char szDCBparam[50];
+    sprintf_s(szDCBparam, "baud=%d parity=%c data=%d stop=%d", baud, parity, databits, stopsbits);
+
+    if(!openPort(portNo))
     {
-        return ERROR_SYSTEM_FUNCTION;
+        return false;
     }
-    return ERROR_SUCCESS_EXT;
+    EnterCriticalSection(&m_csCommunicationSync);
+    BOOL bIsSuccess = TRUE;
+
+    COMMTIMEOUTS  CommTimeouts;
+    CommTimeouts.ReadIntervalTimeout = 0;
+    CommTimeouts.ReadTotalTimeoutMultiplier = 0;
+    CommTimeouts.ReadTotalTimeoutConstant = 0;
+    CommTimeouts.WriteTotalTimeoutMultiplier = 0;
+    CommTimeouts.WriteTotalTimeoutConstant = 0;
+    if (bIsSuccess)
+    {
+       bIsSuccess = SetCommTimeouts(m_hComm, &CommTimeouts);
+    }
+    if (bIsSuccess)
+    {
+        DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, szDCBparam, -1, NULL, 0);
+        wchar_t *pwText = new wchar_t[dwNum];
+        if (!MultiByteToWideChar(CP_ACP, 0, szDCBparam, -1, pwText, dwNum))
+        {
+            bIsSuccess = TRUE;
+        }
+
+        bIsSuccess = GetCommState(m_hComm, &dcb) && BuildCommDCB(pwText, &dcb);
+        dcb.fRtsControl = RTS_CONTROL_ENABLE;
+
+        delete[] pwText;
+    }
+    if (bIsSuccess)
+    {
+        bIsSuccess = SetCommState(m_hComm, &dcb);
+    }
+    PurgeComm(m_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
+    LeaveCriticalSection(&m_csCommunicationSync);
+    return bIsSuccess == TRUE;
 }
 
-void SerialPort::Close()
+bool SerialPort::InitPort(UINT portNo, const LPDCB& plDCB)
 {
-    if (NULL != this->handle_)
+    if (!openPort(portNo))
     {
-        CloseHandle(this->handle_);
+        return false;
     }
-    this->handle_ = NULL;
+
+    EnterCriticalSection(&m_csCommunicationSync);
+
+    if (!SetCommState(m_hComm, plDCB))
+    {
+        return false;
+    }
+
+    PurgeComm(m_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
+
+    LeaveCriticalSection(&m_csCommunicationSync);
+
+    return true;
 }
 
-int SerialPort::Setup()
+void SerialPort::ClosePort()
 {
-    if (NULL == this->handle_)
+    if (m_hComm != INVALID_HANDLE_VALUE)
     {
-        return ERROR_PROGRAM_LOGIC;
+        CloseHandle(m_hComm);
+        m_hComm = INVALID_HANDLE_VALUE;
     }
-    BOOL rtn = SetupComm(this->handle_, 1024, 1024);
-    if(!rtn)
-    {
-        return ERROR_SYSTEM_FUNCTION;
-    }
-
-    COMMTIMEOUTS timeout;
-    timeout.ReadIntervalTimeout = 0;
-    timeout.ReadTotalTimeoutMultiplier = 0;
-    timeout.ReadTotalTimeoutConstant = this->read_time_out_;
-    timeout.WriteTotalTimeoutMultiplier = 0;
-    timeout.WriteTotalTimeoutConstant  = this->write_time_out_;
-    rtn = SetCommTimeouts(this->handle_, &timeout);
-    if (!rtn)
-    {
-        return ERROR_SYSTEM_FUNCTION;
-    }
-    return ERROR_SUCCESS_EXT;
 }
 
-int SerialPort::ReadData(SerialPort::Data& data)
+bool SerialPort::openPort(UINT portNo)
 {
-    BOOL rtn = PurgeComm(this->handle_, PURGE_TXCLEAR|PURGE_RXCLEAR);
-    if (!rtn)
+    EnterCriticalSection(&m_csCommunicationSync);
+    char szPort[50];
+    sprintf_s(szPort, "COM%d", portNo);
+    m_hComm = CreateFileA(szPort, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0);
+    if (m_hComm == INVALID_HANDLE_VALUE)
     {
-        return ERROR_SYSTEM_FUNCTION;
+        LeaveCriticalSection(&m_csCommunicationSync);
+        return false;
     }
-    DWORD derror = 0;
-    COMSTAT stat;
-    rtn = ClearCommError(this->handle_, &derror, &stat);
-    if (!rtn)
-    {
-        return ERROR_SYSTEM_FUNCTION;
-    }
-    DWORD len = 0;
-    rtn = ReadFile(this->handle_, this->read_buffer_, this->read_buffer_cap_, &len, NULL);
-    if (!rtn)
-    {
-        return ERROR_SYSTEM_FUNCTION;
-    }
-    data.buffer = this->read_buffer_;
-    data.length = len;
-    return ERROR_SUCCESS_EXT;
+    LeaveCriticalSection(&m_csCommunicationSync);
+    return true;
 }
 
-int SerialPort::WriteData(const SerialPort::Data& data)
+bool SerialPort::OpenListenThread()
 {
-    BOOL rtn = PurgeComm(this->handle_, PURGE_TXCLEAR|PURGE_RXCLEAR);
-    if (!rtn)
+    UINT threadId;
+    if (m_hListenThread != INVALID_HANDLE_VALUE)
     {
-        return ERROR_SYSTEM_FUNCTION;
+       return false;
     }
-    DWORD derror = 0;
-    COMSTAT stat;
-    rtn = ClearCommError( this->handle_, &derror, &stat );
-    if (!rtn)
+    s_bExit = false;
+    m_hListenThread = (HANDLE)_beginthreadex(NULL, 0, ListenThread, this, 0, &threadId);
+    if (!m_hListenThread)
     {
-        return ERROR_SYSTEM_FUNCTION;
+       return false;
     }
-    DWORD len = 0;
-    rtn = WriteFile( this->handle_, data.buffer, data.length, &len, NULL );
-    if (!rtn )
+    if (!SetThreadPriority(m_hListenThread, THREAD_PRIORITY_ABOVE_NORMAL))
     {
-        return ERROR_SYSTEM_FUNCTION;
+       return false;
     }
-    return ERROR_SUCCESS_EXT;
+    return true;
 }
-*/
 
+bool SerialPort::CloseListenTread()
+{
+    if(m_hListenThread != INVALID_HANDLE_VALUE)
+    {
+        s_bExit = true;
+        Sleep(10);
+        CloseHandle(m_hListenThread);
+        m_hListenThread = INVALID_HANDLE_VALUE;
+    }
+    return true;
+}
 
+UINT SerialPort::GetBytesInCOM()
+{
+    DWORD dwError = 0;
+    COMSTAT  comstat;
+    memset(&comstat, 0, sizeof(COMSTAT));
+    UINT BytesInQue = 0;
+    if(ClearCommError(m_hComm, &dwError, &comstat))
+    {
+       BytesInQue = comstat.cbInQue;
+    }
+    return BytesInQue;
+}
+
+UINT WINAPI SerialPort::ListenThread(void* pParam)
+{
+    char cRecved = 0x00;
+    SerialPort *pSerialPort = reinterpret_cast<SerialPort*>(pParam);
+    while (!pSerialPort->s_bExit)
+    {
+        UINT BytesInQue = pSerialPort->GetBytesInCOM();
+        if (BytesInQue == 0)
+        {
+            Sleep(SLEEP_TIME_INTERVAL);
+            continue;
+        }
+        do
+        {
+            cRecved = 0x00;
+            if (pSerialPort->ReadChar(cRecved) == true)
+            {
+                std::cout << cRecved;
+                continue;
+            }
+        } while (--BytesInQue);
+    }
+
+    return 0;
+}
+
+bool SerialPort::ReadChar(char &cRecved)
+{
+    BOOL  bResult = TRUE;
+    DWORD BytesRead = 0;
+    if (m_hComm == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+    EnterCriticalSection(&m_csCommunicationSync);
+    bResult = ReadFile(m_hComm, &cRecved, 1, &BytesRead, NULL);
+    if ((!bResult))
+    {
+        DWORD dwError = GetLastError();
+        PurgeComm(m_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+        LeaveCriticalSection(&m_csCommunicationSync);
+        return false;
+    }
+    LeaveCriticalSection(&m_csCommunicationSync);
+    return (BytesRead == 1);
+}
+
+bool SerialPort::WriteData(unsigned char* pData, unsigned int length)
+{
+    BOOL   bResult = TRUE;
+    DWORD  BytesToSend = 0;
+    if (m_hComm == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+    EnterCriticalSection(&m_csCommunicationSync);
+    bResult = WriteFile(m_hComm, pData, length, &BytesToSend, NULL);
+    if (!bResult)
+    {
+        DWORD dwError = GetLastError();
+        PurgeComm(m_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+        LeaveCriticalSection(&m_csCommunicationSync);
+
+        return false;
+    }
+    LeaveCriticalSection(&m_csCommunicationSync);
+    return true;
+}

@@ -2,6 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
+
+#include <Windows.h>
+#pragma comment(lib,"advapi32.lib")
+
+#include<tchar.h>
+#include <QSettings>
 #include <QLineEdit>
 #include "version.h"
 #include "question.h"
@@ -9,16 +16,6 @@
 #include "serialportset.h"
 #include <QToolBox>
 #include "baseui.h"
-
-/*
-typedef struct _ControlKit
-{
-    QString label_name;
-    QString ledit_name;
-    QString but_name;
-    QString ledit_value;
-}controlkit;
-*/
 
 namespace Ui {
 class MainWindow;
@@ -32,8 +29,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void start();
-    void test();
-    //void testList(QLabel *label, QLineEdit *lineEdit, QPushButton *button);
+    QString getcomm(int index, QString keyorvalue);
 public slots:
     void VersionSlot();
     void QuestionSlot();
@@ -49,33 +45,15 @@ private:
     Question *m_question;
     Document *m_doc;
     SerialPortSet *m_port_set;
+    BaseUi *m_baseui;
 
 public:
-    //controlkit m_con_kit;
-    QLabel *integerLabel;
-    QLabel *doubleLabel;
-    QLabel *itemLabel;
-    QLabel *textLabel;
-    QLabel *multiLineTextLabel;
-
-
-    QLabel *integerLabelx;
-    QLabel *doubleLabelx;
-    QLabel *itemLabelx;
-    QLabel *textLabelx;
-    QLabel *multiLineTextLabelx;
-
-    QLabel *integerLabely;
-    QLabel *doubleLabely;
-    QLabel *itemLabely;
-    QLabel *textLabely;
-    QLabel *multiLineTextLabely;
-
-    QLabel *integerLabelz;
-    QLabel *doubleLabelz;
-    QLabel *itemLabelz;
-    QLabel *textLabelz;
-    QLabel *multiLineTextLabelz;
+    HKEY hKey;
+    LPCWSTR subkey;
+    wchar_t keyname[256]; //键名数组
+    char keyvalue[256];  //键值数组
+    DWORD keysize,type,valuesize;
+    int indexnum;
 
 };
 

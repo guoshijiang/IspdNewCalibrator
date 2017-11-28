@@ -7,40 +7,43 @@
 #include <QLineEdit>
 #include <QWidget>
 #include <QFrame>
-#include <QGridLayout>
 #include <QObject>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QLayout>
+#include <QScrollArea>
+#include <QGroupBox>
+#include <QFont>
+#include <QDebug>
 
+#include "common.h"
 
 class BaseUi : public QObject
 {
      Q_OBJECT
 
 public:
-    BaseUi(QString label_name, QString edit_name, QString button_name,
-           QString edit_value, QString but_record);
+    BaseUi();
     ~BaseUi();
-
-    void AutoRecordUi();
-
-    void MulRecordUi(int layout_num);
+    void BaseScrollArea();
+    inline QFont font()
+    {
+        QFont m_font("宋体", 18, 75);
+        return m_font;
+    }
 
 public slots:
-
+    void addAutoRecordUi(QString lab_neme, QString ledit_name);
+    void addMulRecordUi(QString lab_neme, QString ledit_name, QString but_name);
+    void addCheckComUi();
+private:
+    void CreateConfigUI();
+    void CreateHeartRateUI();
+    void CreateComDataUI();
 public:
-    QString m_label_name;
-    QString m_edit_name;
-    QString m_button_name;
-    QString m_edit_value;
-    QString m_but_record;
-    QLabel *m_label;
-    QLineEdit *m_edit;
-    QPushButton *m_but;
-    QWidget *m_page;
-    int m_frameStyle;
-    QGridLayout *m_layout;
-    QFrame *m_frame;
+    QVBoxLayout *m_vbox_layout;
+    QVBoxLayout *m_main_layout;
+    QGroupBox *m_con_group;
 };
 
 #endif // BASEUI_H

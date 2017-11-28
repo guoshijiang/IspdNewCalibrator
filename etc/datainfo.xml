@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SerialPort>
   <PortNode Option="checked">
-    <BaudRate>230409</BaudRate>
-    <DataBit>64</DataBit>
+    <BaudRate>230408</BaudRate>
+    <DataBit>8</DataBit>
     <CheckDigit>8</CheckDigit>
-    <StopBit>32</StopBit>
+    <StopBit>16</StopBit>
   </PortNode>
 </SerialPort>

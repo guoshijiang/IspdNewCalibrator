@@ -30,6 +30,9 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+    SerialPortSet(const SerialPortSet &);
+    const SerialPortSet & operator = (const SerialPortSet &);
+
     Ui::SerialPortSet *ui;
     ParseXml *m_sport_xml;
 

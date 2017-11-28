@@ -37,7 +37,8 @@ public:
     int WriteConfigXml(QString xml_path);
 
 private:
-
+    ParseXml(const ParseXml &);
+    const ParseXml & operator = (const ParseXml &);
 public:
    serPortConfig m_sport_con;
    dcInfo m_dcinfo;

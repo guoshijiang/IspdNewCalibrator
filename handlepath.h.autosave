@@ -15,9 +15,7 @@ public:
     QString m_sp_xml_path;
 private:
     HandlePath(const HandlePath&);
-    HandlePath(const HandlePath &&);
     const HandlePath & operator = (const HandlePath&);
-    const HandlePath & operator = (const HandlePath &&);
 };
 
 #endif // HANDLEPATH_H

@@ -25,7 +25,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -33,17 +33,17 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QScrollArea" name="scrollArea_record">
-          <property name="widgetResizable">
-           <bool>true</bool>
+         <widget class="QGroupBox" name="groupBox_record">
+          <property name="title">
+           <string/>
           </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
+          <widget class="QComboBox" name="comboBox">
            <property name="geometry">
             <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>854</width>
-             <height>495</height>
+             <x>280</x>
+             <y>210</y>
+             <width>271</width>
+             <height>121</height>
             </rect>
            </property>
           </widget>
@@ -57,7 +57,11 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_7"/>
+         <widget class="QGroupBox" name="groupBox_check">
+          <property name="title">
+           <string/>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

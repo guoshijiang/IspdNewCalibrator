@@ -5,6 +5,9 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
+QT       += sql
+QT       += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,7 +27,10 @@ SOURCES += main.cpp\
     pugixml.cpp \
     parsexml.cpp \
     serialport.cpp \
-    baseui.cpp
+    baseui.cpp \
+    protoserialport.cpp \
+    dbinfo.cpp \
+    encrypt.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -38,7 +44,10 @@ HEADERS  += mainwindow.h \
     pugixml.hpp \
     parsexml.h \
     serialport.h \
-    baseui.h
+    baseui.h \
+    protoserialport.h \
+    dbinfo.h \
+    encrypt.h
 
 FORMS    += mainwindow.ui \
     version.ui \
