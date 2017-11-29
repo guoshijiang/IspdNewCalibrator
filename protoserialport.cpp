@@ -109,3 +109,4 @@ namespace protoserialport
         return *this;
     }
 }
+

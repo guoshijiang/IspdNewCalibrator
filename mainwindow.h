@@ -15,7 +15,9 @@
 #include "document.h"
 #include "serialportset.h"
 #include <QToolBox>
-#include "baseui.h"
+#include "baseui.hpp"
+
+using namespace InterfaceUI;
 
 namespace Ui {
 class MainWindow;
@@ -45,7 +47,8 @@ private:
     Question *m_question;
     Document *m_doc;
     SerialPortSet *m_port_set;
-    BaseUi *m_baseui;
+    InterfaceUI::BaseUI *m_baseui;
+    InterfaceUI::AbstractFactory *m_factory;
 
 public:
     HKEY hKey;

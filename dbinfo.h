@@ -3,6 +3,15 @@
 
 #include <QSqlDatabase>
 #include <QDataStream>
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QApplication>
+#include <QtEndian>
+#include <QMap>
+#include <QDebug>
+#include <cmath>
+#include <assert.h>
 
 class DBinfo
 {
@@ -14,7 +23,6 @@ public:
     bool init(QString & err);
     bool query(const QString & sql, QVariant & res, QString & err);
     bool update(const QString & sql, QString & err);
-
     void set_db_path(const QString & path);
 private:
     DBinfo(const DBinfo &);

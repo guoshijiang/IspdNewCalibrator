@@ -41,9 +41,11 @@ unsigned int Encrypt::dencrypt_ispd_id(const std::string& id)
             break;
         }
         assert(34 != j);
-        rtn += j * pow(34, size-i);
+        rtn += j * pow((double)34, (double)size-i);
     }
     return rtn;
 }
+
+
 
 

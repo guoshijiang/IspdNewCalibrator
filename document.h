@@ -16,6 +16,8 @@ public:
     ~Document();
     void doc_start();
 
+private slots:
+
 private:
     Ui::Document *ui;
 };

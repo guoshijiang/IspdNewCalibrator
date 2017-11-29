@@ -14,7 +14,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = IspdNewCalibrator
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     toolbar.cpp \
@@ -44,10 +43,10 @@ HEADERS  += mainwindow.h \
     pugixml.hpp \
     parsexml.h \
     serialport.h \
-    baseui.h \
     protoserialport.h \
     dbinfo.h \
-    encrypt.h
+    encrypt.h \
+    baseui.hpp
 
 FORMS    += mainwindow.ui \
     version.ui \

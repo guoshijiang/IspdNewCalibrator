@@ -26,9 +26,7 @@ public:
     unsigned int dencrypt_ispd_id(const std::string& id);
 private:
     Encrypt(const Encrypt&);
-    Encrypt(const Encrypt &&);
     const Encrypt & operator=(const Encrypt &);
-    const Encrypt & operator=(const Encrypt &&);
 };
 
 #endif // ENCRYPT_H

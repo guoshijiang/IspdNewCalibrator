@@ -10,8 +10,6 @@
 #include <iostream>
 #include <QScrollArea>
 
-
-
 #include "serialport.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -125,6 +123,7 @@ QString MainWindow::getcomm(int index, QString keyorvalue)
 
 void MainWindow::start()
 {
+#if 0
     QString path = "HKEY_LOCAL_MACHINE\\HARDWARE\\DEVICEMAP\\SERIALCOMM";
     QSettings *settings = new QSettings(path, QSettings::NativeFormat);
     QStringList key = settings->allKeys();
@@ -142,20 +141,30 @@ void MainWindow::start()
 
     for(int j = 0; j < comlist.size(); ++j)
     {
-        this->ui->comboBox->addItem(comlist[j]);
+        //this->ui->comboBox->addItem(comlist[j]);
     }
 
     qDebug() << "windows:" << comlist;
 
 
-    m_baseui = new BaseUi();
+#endif
+
+    m_factory = new InterfaceUI::RecordUIFactory;
+    m_baseui = m_factory->CreatUIRole();
     m_baseui->BaseScrollArea();
-    //this->ui->groupBox_record->setLayout(m_baseui->m_main_layout);
-    this->ui->groupBox_check->setLayout(m_baseui->m_main_layout);
-    for(int i = 0; i < 100; i++)
+    this->ui->groupBox_record->setLayout(m_baseui->m_main_layout);
+    for(int i = 0; i < 10; i++)
     {
-        //this->m_baseui->addAutoRecordUi("com" + QString::number(i), "100100" + QString::number(i));
-        this->m_baseui->addCheckComUi();
+        this->m_baseui->AddAutoChildUI("com" + QString::number(i));
+    }
+
+    m_factory = new InterfaceUI::CheckUIFactory;
+    m_baseui = m_factory->CreatUIRole();
+    m_baseui->BaseScrollArea();
+    this->ui->groupBox_check->setLayout(m_baseui->m_main_layout);
+    for(int i = 0; i < 10; i++)
+    {
+        this->m_baseui->AddMulChildUI();
     }
 
     this->setWindowTitle(QString::fromLocal8Bit("超版板上位机测试软件"));

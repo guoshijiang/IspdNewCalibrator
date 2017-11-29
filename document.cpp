@@ -19,3 +19,4 @@ void Document::doc_start()
     this->setWindowTitle(QString::fromLocal8Bit("软件操作说明文档"));
     this->showNormal();
 }
+

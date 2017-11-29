@@ -10,6 +10,12 @@
 #include <QDataStream>
 #include <QIODevice>
 #include <QVector>
+#include <QMessageBox>
+#include <QApplication>
+#include <QtEndian>
+#include <QMap>
+#include <cmath>
+#include <assert.h>
 
 namespace protoserialport
 {
@@ -502,3 +508,5 @@ namespace protoserialport
         T m_data;
     };
 }
+
+#endif
