@@ -20,3 +20,5 @@ void Document::doc_start()
     this->showNormal();
 }
 
+
+

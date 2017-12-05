@@ -26,7 +26,7 @@
 namespace Common
 {
     //串口错误码定义
-    #define SERIALPORTRRCODE 1000
+    #define GETSERIALPORTERROR 1000
 
     //UDP通信错误码定义
     #define UDPERRCODE 2000

@@ -21,9 +21,6 @@
 
 namespace InterfaceUI
 {
-    //存在com号和ID值的map
-    //QMap<QString, QString> map;
-
     //UI界面基类
     class BaseUI : public QObject
     {
@@ -80,9 +77,7 @@ namespace InterfaceUI
     public:
        RecordUI() : BaseUI()
        {
-
        }
-
        virtual ~RecordUI()
        {
 
@@ -162,7 +157,6 @@ namespace InterfaceUI
            m_record_page->setLayout(m_record_layout);
            m_vbox_layout->insertWidget(m_vbox_layout->count()-1, m_record_page);
 
-
        }
 
        virtual void getValueFromUI()
@@ -171,12 +165,6 @@ namespace InterfaceUI
        }
 
     public slots:
-        void on_m_record_ledit_textChanged(const QString &)
-        {
-            qDebug() << "111111111111";
-            //map.insert(m_record_label->text(), m_record_ledit->text());
-            //qDebug() << m_record_label->text() << m_record_ledit->text();
-        }
 
     private:
        RecordUI(const RecordUI &);
