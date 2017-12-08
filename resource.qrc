@@ -14,5 +14,6 @@
         <file>versions.png</file>
         <file>sportset.png</file>
         <file>exit.png</file>
+        <file>mul.png</file>
     </qresource>
 </RCC>

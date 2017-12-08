@@ -29,35 +29,15 @@ public:
 public:
     SerialPort();
     ~SerialPort();
-    std::string GetSystemFunctionErrorMessage();
     int getSerialPortList(int index, QString key_or_value);
-    bool openPort(UINT portNo);
+    bool openPort(char* portName);
     void ClosePort();
-    bool initSerilPort(UINT portNo = 1, UINT baud = CBR_9600,
+    bool initSerilPort(char *portName = "com1", UINT baud = CBR_9600,
                        char parity = 'N', UINT databits = 8,
                        UINT stopsbits = 1);
-
-    bool initSerilPort(UINT portNo, const LPDCB& plDCB);
-
-    inline unsigned int GetReadTimeout() const
-    {
-        return this->m_read_time_out;
-    }
-    inline void SetReadTimeout(unsigned int t = 3000)
-    {
-        this->m_read_time_out = t;
-    }
-
-    inline unsigned int GetWriteTimeout() const
-    {
-        return this->m_write_time_out;
-    }
-    inline void SetWriteTimeout(unsigned int t = 3000)
-    {
-        this->m_write_time_out = t;
-    }
-    bool readData(char *recv_buf, int recv_len);
-    int readData(SerialPort::Data& data);
+    bool initSerilPort(char* portName, const LPDCB& plDCB);
+    UINT GetBytesFromCOM();
+    int readData(char *msg, int msg_len);
     int writeData(const SerialPort::Data& data);
 
 private:

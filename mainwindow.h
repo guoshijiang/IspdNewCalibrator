@@ -58,8 +58,12 @@ public:
         QFont m_font("宋体", 18, 75);
         return m_font;
     }
-    void addAutoRecordUi();
+    void addAutoRecordUi(QString com_name);
+    void addMulRecordUi(QString com_name);
+
 public slots:
+    void testAutoSlot();
+    void testMulSlot();
     void VersionSlot();
     void QuestionSlot();
     void DocSlot();
@@ -68,8 +72,12 @@ public slots:
     void RecordSlot();
     void CheckComSlot();
     void CloseApp();
+
     void m_ledit_textChanged(QString text);
-private:
+
+    void on_m_but_clicked();
+
+public:
     Ui::MainWindow *ui;
     Version *m_version;
     Question *m_question;
@@ -82,25 +90,19 @@ private:
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
 
-    QPushButton *m_add_but;
 
     QWidget *m_page;
     QGridLayout *m_layout;
     QLineEdit *m_ledit;
     QLabel *m_label;
     QPushButton *m_but;
+
+
     SerialPort *m_serial_port;
+    QStringList m_com_list;
+    QList<QLineEdit*> m_auto_record_list;
+    QList<QLineEdit*> m_mul_record_list;
 
-    QList<QLineEdit*> m_list;
-    QVector<QString> m_vec;
-
-public:
-    HKEY hKey;
-    LPCWSTR subkey;
-    wchar_t keyname[256]; //键名数组
-    char keyvalue[256];  //键值数组
-    DWORD keysize,type,valuesize;
-    int indexnum;
 };
 
 #endif // MAINWINDOW_H

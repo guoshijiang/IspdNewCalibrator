@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     baseui.cpp \
     protoserialport.cpp \
     dbinfo.cpp \
-    encrypt.cpp
+    encrypt.cpp \
+    autorecord.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     protoserialport.h \
     dbinfo.h \
     encrypt.h \
-    baseui.hpp
+    baseui.hpp \
+    autorecord.h
 
 FORMS    += mainwindow.ui \
     version.ui \

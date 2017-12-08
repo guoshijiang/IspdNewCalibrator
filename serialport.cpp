@@ -3,6 +3,9 @@
 
 SerialPort::SerialPort()
 {
+    this->m_read_time_out = 8000;
+    this->m_write_time_out = 8000;
+
     this->m_set = new QSettings(g_path, QSettings::NativeFormat);
     QStringList key = this->m_set->allKeys();
     this->m_set_len = key.size();
@@ -12,20 +15,6 @@ SerialPort::~SerialPort()
 {  
     delete this->m_set;
     this->ClosePort();
-}
-
-std::string SerialPort::GetSystemFunctionErrorMessage()
-{
-    DWORD rtn = GetLastError();
-
-    char* message = NULL;
-    DWORD ret = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL, rtn, MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT), (LPTSTR) &message,  0, NULL );
-    if ( ret == 0 )
-    {
-        return "";
-    }
-    return std::string(message);
 }
 
 int SerialPort::getSerialPortList(int index, QString key_or_value)
@@ -80,69 +69,64 @@ int SerialPort::getSerialPortList(int index, QString key_or_value)
     return 0;
 }
 
-bool SerialPort::openPort(UINT portNo)
+bool SerialPort::openPort(char* portName)
 {
-    char szPort[50];
-    sprintf_s(szPort, "COM%d", portNo);
-    m_hle_comm = CreateFileA(szPort, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0);
-    if (m_hle_comm == INVALID_HANDLE_VALUE)
+    this->m_hle_comm = CreateFileA(portName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0);
+    if(this->m_hle_comm == INVALID_HANDLE_VALUE)
     {
         return false;
     }
     return true;
 }
 
-bool SerialPort::initSerilPort(UINT portNo, UINT baud , char parity,
+bool SerialPort::initSerilPort(char *portName, UINT baud , char parity,
     UINT databits , UINT stopsbits)
 {
     char szDCBparam[50];
     sprintf_s(szDCBparam, "baud=%d parity=%c data=%d stop=%d", baud, parity, databits, stopsbits);
-    if (!openPort(portNo))
+    if (!openPort(portName))
     {
         return false;
     }
-    BOOL bIsSuccess = TRUE;
-    if(bIsSuccess )
+    BOOL is_success = TRUE;
+    if(is_success)
     {
-       bIsSuccess = SetupComm(m_hle_comm, 10, 10);
+       is_success = SetupComm(this->m_hle_comm, 10, 10);
     }
-    COMMTIMEOUTS  CommTimeouts;
+    COMMTIMEOUTS CommTimeouts;
     CommTimeouts.ReadIntervalTimeout = 0;
     CommTimeouts.ReadTotalTimeoutMultiplier = 0;
     CommTimeouts.ReadTotalTimeoutConstant = this->m_read_time_out;
     CommTimeouts.WriteTotalTimeoutMultiplier = 0;
     CommTimeouts.WriteTotalTimeoutConstant = this->m_write_time_out;
-    if (bIsSuccess)
+    if(is_success)
     {
-        bIsSuccess = SetCommTimeouts(m_hle_comm, &CommTimeouts);
+        is_success = SetCommTimeouts(this->m_hle_comm, &CommTimeouts);
     }
     DCB  dcb;
-    if (bIsSuccess)
+    if(is_success)
     {
         DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, szDCBparam, -1, NULL, 0);
         wchar_t *pwText = new wchar_t[dwNum];
         if (!MultiByteToWideChar(CP_ACP, 0, szDCBparam, -1, pwText, dwNum))
         {
-            bIsSuccess = TRUE;
+            is_success = TRUE;
         }
-        bIsSuccess = GetCommState(m_hle_comm, &dcb) && BuildCommDCB(pwText, &dcb);
-        dcb.fRtsControl = RTS_CONTROL_ENABLE; //开启RTS flow控制
+        is_success = GetCommState(m_hle_comm, &dcb) && BuildCommDCB(pwText, &dcb);
+        dcb.fRtsControl = RTS_CONTROL_ENABLE;
         delete[] pwText;
     }
-
-    if (bIsSuccess)
+    if(is_success)
     {
-        bIsSuccess = SetCommState(m_hle_comm, &dcb);
+        is_success = SetCommState(m_hle_comm, &dcb);
     }
-
     PurgeComm(m_hle_comm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
-
-    return bIsSuccess == TRUE;
+    return is_success == TRUE;
 }
 
-bool SerialPort::initSerilPort(UINT portNo, const LPDCB& plDCB)
+bool SerialPort::initSerilPort(char* portName, const LPDCB& plDCB)
 {
-    if (!openPort(portNo))
+    if (!openPort(portName))
     {
         return false;
     }
@@ -150,104 +134,71 @@ bool SerialPort::initSerilPort(UINT portNo, const LPDCB& plDCB)
     {
         return false;
     }
-    PurgeComm(m_hle_comm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
+    PurgeComm(this->m_hle_comm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
     return true;
 }
 
-int SerialPort::readData(SerialPort::Data& data)
+UINT SerialPort::GetBytesFromCOM()
 {
-    BOOL rtn = PurgeComm(this->m_hle_comm, PURGE_TXCLEAR|PURGE_RXCLEAR);
-    if (!rtn)
+    DWORD dwError = 0;
+    COMSTAT  comstat;
+    memset(&comstat, 0, sizeof(COMSTAT));
+    UINT BytesInQue = 0;
+    if(ClearCommError(this->m_hle_comm, &dwError, &comstat))
     {
-        qDebug() << "PurgeComm error !";
-        return -1;
+        BytesInQue = comstat.cbInQue;
     }
-    DWORD derror = 0;
-    COMSTAT stat;
-    rtn = ClearCommError(this->m_hle_comm, &derror, &stat);
-    if (!rtn)
-    {
-        qDebug() << "ClearCommError error !";
-        return -1;
-    }
-    DWORD len = 0;
-    rtn = ReadFile(this->m_hle_comm, this->m_read_buffer, this->m_read_buffer_cap,
-        &len, NULL);
-    if (!rtn)
-    {
-        qDebug() << "ReadFile error !";
-        return -1;
-    }
-    data.buffer = this->m_read_buffer;
-    data.length = len;
-    return 0;
+    return BytesInQue;
 }
 
-bool SerialPort::readData(char *recv_buf, int recv_len)
+int SerialPort::readData(char *msg, int msg_len)
 {
-    BOOL  bResult   = TRUE;
-    DWORD BytesRead = 0;
-    DWORD derror    = 0;
-    COMSTAT stat;
-    char buf[9];
-
-    /*
-    memset(recv_buf, 0x00, sizeof(recv_buf));
-    recv_buf = (char*)malloc(recv_len);
-    if(!recv_buf)
+    BOOL      b_ret      = TRUE;
+    DWORD     byte_read  = 0;
+    DWORD     d_error    = 0;
+    COMSTAT   stat;
+    char buf[128]        = { 0 };
+    if(this->m_hle_comm == INVALID_HANDLE_VALUE)
     {
-        std::cout << "malloc recv_buf error" << endl;
+        return -1;
     }
-    */
-
-    if (m_hle_comm == INVALID_HANDLE_VALUE)
-    {
-        return false;
-    }
-
     BOOL rtn = PurgeComm(this->m_hle_comm, PURGE_TXCLEAR|PURGE_RXCLEAR );
-    if (!rtn)
+    if(!rtn)
     {
-        return false;
+        return -1;
     }
-
-    rtn = ClearCommError(this->m_hle_comm, &derror, &stat );
-    if (!rtn)
+    rtn = ClearCommError(this->m_hle_comm, &d_error, &stat);
+    if(!rtn)
     {
-        return false;
+        return -1;
     }
-    bResult = ReadFile(m_hle_comm, &buf, 9, &BytesRead, NULL);
-    if((!bResult))
+    b_ret = ReadFile(this->m_hle_comm, &buf, msg_len, &byte_read, NULL);
+    if((!b_ret))
     {
-        PurgeComm(m_hle_comm, PURGE_RXCLEAR | PURGE_RXABORT);
-        return false;
+        PurgeComm(this->m_hle_comm, PURGE_RXCLEAR | PURGE_RXABORT);
+        return -1;
     }
-    //0F 0F 02 04 02 02 03 04 2F
-    //0F 0F 02 04 01 02 03 04 2E
-    for (size_t i = 0; i < sizeof(buf); ++i)
-    {
-        printf("%02X ", (char*)buf[i]);
-    }
-    return (BytesRead == 1);
+    memcpy(msg, buf, msg_len);
+    return 0;
 }
 
 int SerialPort::writeData(const SerialPort::Data& data)
 {
     BOOL rtn = PurgeComm(this->m_hle_comm, PURGE_TXCLEAR|PURGE_RXCLEAR );
-    if (!rtn)
+    if(!rtn)
     {
         return -1;
     }
-    DWORD derror = 0;
+    DWORD d_error = 0;
     COMSTAT stat;
-    rtn = ClearCommError(this->m_hle_comm, &derror, &stat );
-    if (!rtn)
+    rtn = ClearCommError(this->m_hle_comm, &d_error, &stat);
+    if(!rtn)
     {
         return -1;
     }
     DWORD len = 0;
     rtn = WriteFile(this->m_hle_comm, data.buffer, data.length, &len, NULL );
-    if (!rtn)
+    if(!rtn)
     {
         return -1;
     }
@@ -256,9 +207,9 @@ int SerialPort::writeData(const SerialPort::Data& data)
 
 void SerialPort::ClosePort()
 {
-    if(m_hle_comm != INVALID_HANDLE_VALUE)
+    if(this->m_hle_comm != INVALID_HANDLE_VALUE)
     {
-        CloseHandle(m_hle_comm);
-        m_hle_comm = INVALID_HANDLE_VALUE;
+        CloseHandle(this->m_hle_comm);
+        this->m_hle_comm = INVALID_HANDLE_VALUE;
     }
 }
