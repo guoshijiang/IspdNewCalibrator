@@ -28,15 +28,24 @@
 #include <QMap>
 #include <QAction>
 #include <QByteArray>
+#include <QToolBox>
+#include <QTimer>
+
 #include "version.h"
 #include "question.h"
 #include "document.h"
 #include "serialportset.h"
 #include "encrypt.h"
-#include <QToolBox>
+#include "controlserverstutasinfo.h"
+#include "readspecificconfig.h"
 #include "baseui.hpp"
 #include "serialport.h"
-#include <QTimer>
+#include "writespecconfig.h"
+#include "startupmrautodomain.h"
+#include "startupmrautofactoryreset.h"
+#include "factoryreset.h"
+#include "restartmr.h"
+#include "syncspecmrdomain.h"
 
 using namespace InterfaceUI;
 
@@ -73,8 +82,17 @@ public slots:
     void CheckComSlot();
     void CloseApp();
 
-    void m_ledit_textChanged(QString text);
+    void ControlServerStutasInfoSlot();
+    void ReadSpecificConfigSlot();
+    void WriteSpecConfigSlot();
+    void StartUpMrCloseAutoDomainSlot();
+    void StartUpMrCloseAutoFactoryResetSlot();
+    void SyncSpecMrDomainSlot();
+    void FactoryResetSlot();
+    void RestartMrSlot();
 
+
+    void m_ledit_textChanged(QString text);
     void on_m_but_clicked();
 
 public:
@@ -84,12 +102,18 @@ public:
     Document *m_doc;
     SerialPortSet *m_port_set;
     Encrypt *m_encrypt;
-    InterfaceUI::BaseUI *m_baseui;
-    InterfaceUI::AbstractFactory *m_factory;
+    ControlServerStutasInfo *m_css_info;
+    ReadSpecificConfig *m_rsc_config;
+    WriteSpecConfig *m_write_spec_config;
+
+    StartUpMrAutoDomain *m_start_mr_auto_domain;
+    StartUpMrAutoFactoryReset *m_start_mr_auto_freset;
+    SyncSpecMrDomain *m_sync_spec_mr_domain;
+    RestartMr *m_restart_spec_mr;
+    FactoryReset *m_factory_reset;
 
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
-
 
     QWidget *m_page;
     QGridLayout *m_layout;
@@ -97,12 +121,10 @@ public:
     QLabel *m_label;
     QPushButton *m_but;
 
-
     SerialPort *m_serial_port;
     QStringList m_com_list;
     QList<QLineEdit*> m_auto_record_list;
     QList<QLineEdit*> m_mul_record_list;
-
 };
 
 #endif // MAINWINDOW_H

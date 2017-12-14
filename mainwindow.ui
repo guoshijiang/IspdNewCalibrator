@@ -25,7 +25,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -156,12 +156,31 @@
      <string>设置</string>
     </property>
     <addaction name="action_serialport_set"/>
+    <addaction name="separator"/>
+    <addaction name="action_open_close_domain"/>
+    <addaction name="separator"/>
+    <addaction name="action_open_close_reset"/>
+    <addaction name="separator"/>
+    <addaction name="action_specmr_domain"/>
+    <addaction name="action_reset_cch"/>
+    <addaction name="separator"/>
+    <addaction name="action_reset_specmr"/>
+    <addaction name="separator"/>
+    <addaction name="action_read_speconfig"/>
+    <addaction name="action_write_speconfig"/>
+   </widget>
+   <widget class="QMenu" name="menu_6">
+    <property name="title">
+     <string>服务器控制操作</string>
+    </property>
+    <addaction name="action_udp_server_info"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_5"/>
    <addaction name="menu_3"/>
    <addaction name="menu_4"/>
+   <addaction name="menu_6"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -194,12 +213,17 @@
    <addaction name="separator"/>
    <addaction name="action_serialport_set"/>
    <addaction name="separator"/>
+   <addaction name="action_read_speconfig"/>
+   <addaction name="separator"/>
+   <addaction name="action_write_speconfig"/>
+   <addaction name="separator"/>
+   <addaction name="action_udp_server_info"/>
+   <addaction name="separator"/>
    <addaction name="action_doc"/>
    <addaction name="separator"/>
    <addaction name="action_question"/>
    <addaction name="separator"/>
    <addaction name="action_version"/>
-   <addaction name="separator"/>
   </widget>
   <action name="action_newfile">
    <property name="icon">
@@ -328,6 +352,96 @@
    </property>
    <property name="text">
     <string>退出</string>
+   </property>
+  </action>
+  <action name="action_open_close_domain">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/opendomain.png</normaloff>:/opendomain.png</iconset>
+   </property>
+   <property name="text">
+    <string>开启或关闭接入终端自动同步Domain功能</string>
+   </property>
+  </action>
+  <action name="action_close_domain">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/closedomain.png</normaloff>:/closedomain.png</iconset>
+   </property>
+   <property name="text">
+    <string>关闭接入终端自动同步Domain功能</string>
+   </property>
+  </action>
+  <action name="action_open_close_reset">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/openreset.png</normaloff>:/openreset.png</iconset>
+   </property>
+   <property name="text">
+    <string>开启或关闭接入终端自动恢复出厂设置功能</string>
+   </property>
+  </action>
+  <action name="action_close_reset">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/closereset.png</normaloff>:/closereset.png</iconset>
+   </property>
+   <property name="text">
+    <string>关闭接入终端自动恢复出厂设置功能</string>
+   </property>
+  </action>
+  <action name="action_specmr_domain">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/synchronization.png</normaloff>:/synchronization.png</iconset>
+   </property>
+   <property name="text">
+    <string>同步指定终端的Domain</string>
+   </property>
+  </action>
+  <action name="action_reset_cch">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resetup.png</normaloff>:/resetup.png</iconset>
+   </property>
+   <property name="text">
+    <string>恢复指定终端出厂设置</string>
+   </property>
+  </action>
+  <action name="action_reset_specmr">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/startup.png</normaloff>:/startup.png</iconset>
+   </property>
+   <property name="text">
+    <string>重启指定终端</string>
+   </property>
+  </action>
+  <action name="action_read_speconfig">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/read_mr.png</normaloff>:/read_mr.png</iconset>
+   </property>
+   <property name="text">
+    <string>读指定终端配置信息</string>
+   </property>
+  </action>
+  <action name="action_write_speconfig">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/write_mr.png</normaloff>:/write_mr.png</iconset>
+   </property>
+   <property name="text">
+    <string>写指定终端配置信息</string>
+   </property>
+  </action>
+  <action name="action_udp_server_info">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/UDP.png</normaloff>:/UDP.png</iconset>
+   </property>
+   <property name="text">
+    <string>获取UDP控制服务状态信息</string>
    </property>
   </action>
  </widget>

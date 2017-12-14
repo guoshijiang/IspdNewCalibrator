@@ -15,5 +15,14 @@
         <file>sportset.png</file>
         <file>exit.png</file>
         <file>mul.png</file>
+        <file>opendomain.png</file>
+        <file>closereset.png</file>
+        <file>openreset.png</file>
+        <file>read_mr.png</file>
+        <file>resetup.png</file>
+        <file>startup.png</file>
+        <file>synchronization.png</file>
+        <file>write_mr.png</file>
+        <file>UDP.png</file>
     </qresource>
 </RCC>

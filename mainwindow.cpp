@@ -18,7 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow), m_version(new Version),
     m_question(new Question), m_doc(new Document),
     m_port_set(new SerialPortSet), m_serial_port(new SerialPort),
-    m_encrypt(new Encrypt)
+    m_encrypt(new Encrypt), m_css_info(new ControlServerStutasInfo),
+    m_rsc_config(new ReadSpecificConfig), m_write_spec_config(new WriteSpecConfig),
+    m_start_mr_auto_domain(new StartUpMrAutoDomain), m_start_mr_auto_freset(new StartUpMrAutoFactoryReset),
+    m_sync_spec_mr_domain(new SyncSpecMrDomain), m_restart_spec_mr(new RestartMr),
+    m_factory_reset(new FactoryReset)
 {
     QScrollArea *pArea = new QScrollArea();
     QWidget *pWidget = new QWidget();
@@ -36,12 +40,82 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete this->m_version;
-    delete this->m_question;
-    delete this->m_doc;
-    delete this->m_port_set;
-    delete this->m_serial_port;
-    delete this->m_encrypt;
+    if(this->m_version != NULL)
+    {
+        delete this->m_version;
+        this->m_version = NULL;
+    }
+    if(this->m_question != NULL)
+    {
+        delete this->m_question;
+        this->m_question = NULL;
+    }
+    if(this->m_doc != NULL)
+    {
+        delete this->m_doc;
+        this->m_doc = NULL;
+    }
+    if(this->m_port_set != NULL)
+    {
+        delete this->m_port_set;
+        this->m_port_set = NULL;
+    }
+    if(this->m_serial_port != NULL)
+    {
+        delete this->m_serial_port;
+        this->m_serial_port = NULL;
+    }
+    if(this->m_encrypt != NULL)
+    {
+        delete this->m_encrypt;
+        this->m_encrypt = NULL;
+    }
+    if(this->m_css_info != NULL)
+    {
+       delete this->m_css_info;
+       this->m_css_info = NULL;
+    }
+
+    if(this->m_rsc_config != NULL)
+    {
+        delete this->m_rsc_config;
+        this->m_rsc_config = NULL;
+    }
+
+    if(this->m_write_spec_config != NULL)
+    {
+        delete this->m_write_spec_config;
+        this->m_write_spec_config = NULL;
+    }
+
+    if(this->m_start_mr_auto_domain != NULL)
+    {
+        delete this->m_start_mr_auto_domain;
+        this->m_start_mr_auto_domain = NULL;
+    }
+    if(this->m_start_mr_auto_freset != NULL)
+    {
+        delete this->m_start_mr_auto_freset;
+        this->m_start_mr_auto_freset = NULL;
+    }
+
+    if(this->m_sync_spec_mr_domain != NULL)
+    {
+        delete this->m_sync_spec_mr_domain;
+        this->m_sync_spec_mr_domain = NULL;
+    }
+
+    if(this->m_restart_spec_mr != NULL)
+    {
+        delete this->m_restart_spec_mr;
+        this->m_restart_spec_mr = NULL;
+    }
+
+    if(this->m_factory_reset != NULL)
+    {
+        delete this->m_factory_reset;
+        this->m_factory_reset = NULL;
+    }
 }
 
 void MainWindow::testAutoSlot()
@@ -94,11 +168,51 @@ void MainWindow::CloseApp()
     this->close();
 }
 
+void MainWindow::ControlServerStutasInfoSlot()
+{
+    this->m_css_info->CSSInfoStart();
+}
+
+void MainWindow::ReadSpecificConfigSlot()
+{
+    this->m_rsc_config->ReadSpecConfig_start();
+}
+
+void MainWindow::WriteSpecConfigSlot()
+{
+    this->m_write_spec_config->WriteSpecConfig_start();
+}
+
+void MainWindow::StartUpMrCloseAutoDomainSlot()
+{
+    this->m_start_mr_auto_domain->StartUpMrAutoDomain_start();
+}
+
+
+void MainWindow::StartUpMrCloseAutoFactoryResetSlot()
+{
+    this->m_start_mr_auto_freset->StartUpMrAutoFactoryReset_start();
+}
+
+void MainWindow::SyncSpecMrDomainSlot()
+{
+    this->m_sync_spec_mr_domain->SyncSpecMrDomainInit();
+}
+
+void MainWindow::FactoryResetSlot()
+{
+    this->m_factory_reset->FactoryResetInit();
+}
+
+void MainWindow::RestartMrSlot()
+{
+    this->m_restart_spec_mr->RestartMrInit();
+}
+
 void MainWindow::start()
 {
     this->setWindowTitle(QString::fromLocal8Bit("超版板上位机测试软件"));
     this->showMaximized();
-
     connect(this->ui->action_auto, &QAction::triggered, this, &MainWindow::testAutoSlot);
     connect(this->ui->action_mul, &QAction::triggered, this, &MainWindow::testMulSlot);
     connect(this->ui->action_version, &QAction::triggered, this, &MainWindow::VersionSlot);
@@ -109,6 +223,17 @@ void MainWindow::start()
     connect(this->ui->action_record, &QAction::triggered, this, &MainWindow::RecordSlot);
     connect(this->ui->action_com, &QAction::triggered, this, &MainWindow::CheckComSlot);
     connect(this->ui->action_eixit, &QAction::triggered, this, &MainWindow::CloseApp);
+
+    connect(this->ui->action_open_close_domain, &QAction::triggered, this, &MainWindow::StartUpMrCloseAutoDomainSlot);
+    connect(this->ui->action_open_close_reset, &QAction::triggered, this, &MainWindow::StartUpMrCloseAutoFactoryResetSlot);
+
+
+    connect(this->ui->action_specmr_domain, &QAction::triggered, this, &MainWindow::SyncSpecMrDomainSlot);
+    connect(this->ui->action_reset_cch, &QAction::triggered, this, &MainWindow::FactoryResetSlot);
+    connect(this->ui->action_reset_specmr, &QAction::triggered, this, &MainWindow::RestartMrSlot);
+    connect(this->ui->action_write_speconfig, &QAction::triggered, this, &MainWindow::WriteSpecConfigSlot);
+    connect(this->ui->action_read_speconfig, &QAction::triggered, this, &MainWindow::ReadSpecificConfigSlot);
+    connect(this->ui->action_udp_server_info, &QAction::triggered, this, &MainWindow::ControlServerStutasInfoSlot);
 
     this->m_com_list.clear();
     for (int i=0; i < m_serial_port->m_set_len; i++)
@@ -172,6 +297,8 @@ void MainWindow::addAutoRecordUi(QString com_name)
     connect(this->m_ledit, SIGNAL(textChanged(QString)), SLOT(m_ledit_textChanged(QString)));
 }
 
+
+
 void MainWindow::addMulRecordUi(QString com_name)
 {
     this->m_page = new QWidget;
@@ -201,7 +328,6 @@ void MainWindow::addMulRecordUi(QString com_name)
     this->m_but->setObjectName(com_name);
 
     connect(m_but, SIGNAL(clicked()), this, SLOT(on_m_but_clicked()));
-
 }
 
 void MainWindow::on_m_but_clicked()

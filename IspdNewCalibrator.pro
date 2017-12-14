@@ -30,7 +30,16 @@ SOURCES += main.cpp\
     protoserialport.cpp \
     dbinfo.cpp \
     encrypt.cpp \
-    autorecord.cpp
+    autorecord.cpp \
+    controlserverstutasinfo.cpp \
+    readspecificconfig.cpp \
+    writespecconfig.cpp \
+    restartmr.cpp \
+    factoryreset.cpp \
+    syncspecmrdomain.cpp \
+    startupmrautodomain.cpp \
+    startupmrautofactoryreset.cpp \
+    basehttpclient.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -48,13 +57,33 @@ HEADERS  += mainwindow.h \
     dbinfo.h \
     encrypt.h \
     baseui.hpp \
-    autorecord.h
+    autorecord.h \
+    controlserverstutasinfo.h \
+    readspecificconfig.h \
+    writespecconfig.h \
+    restartmr.h \
+    factoryreset.h \
+    syncspecmrdomain.h \
+    startupmrautodomain.h \
+    startupmrautofactoryreset.h \
+    basehttpclient.h
 
 FORMS    += mainwindow.ui \
     version.ui \
     question.ui \
     document.ui \
-    serialportset.ui
+    serialportset.ui \
+    controlserverstutasinfo.ui \
+    readspecificconfig.ui \
+    writespecconfig.ui \
+    restartmr.ui \
+    factoryreset.ui \
+    syncspecmrdomain.ui \
+    startupmrautodomain.ui \
+    startupmrautofactoryreset.ui \
 
 RESOURCES += \
     resource.qrc
+
+DISTFILES += \
+    network

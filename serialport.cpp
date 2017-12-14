@@ -14,7 +14,7 @@ SerialPort::SerialPort()
 SerialPort::~SerialPort()
 {  
     delete this->m_set;
-    this->ClosePort();
+    //this->ClosePort();
 }
 
 int SerialPort::getSerialPortList(int index, QString key_or_value)
