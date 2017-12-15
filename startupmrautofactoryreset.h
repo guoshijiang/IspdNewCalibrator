@@ -2,6 +2,8 @@
 #define STARTUPMRAUTOFACTORYRESET_H
 
 #include <QDialog>
+#include <QString>
+#include "basehttpclient.h"
 
 namespace Ui {
 class StartUpMrAutoFactoryReset;
@@ -21,7 +23,9 @@ private slots:
 
 private:
     Ui::StartUpMrAutoFactoryReset *ui;
-
+    HttpClient::OpenCloseMrAutoFactoryResetHttpRequest* m_oc_mr_auto_freset;
+public:
+    QString m_req_pro;
 private:
     StartUpMrAutoFactoryReset(const StartUpMrAutoFactoryReset &);
     const StartUpMrAutoFactoryReset & operator = (const StartUpMrAutoFactoryReset &);

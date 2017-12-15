@@ -223,11 +223,8 @@ void MainWindow::start()
     connect(this->ui->action_record, &QAction::triggered, this, &MainWindow::RecordSlot);
     connect(this->ui->action_com, &QAction::triggered, this, &MainWindow::CheckComSlot);
     connect(this->ui->action_eixit, &QAction::triggered, this, &MainWindow::CloseApp);
-
     connect(this->ui->action_open_close_domain, &QAction::triggered, this, &MainWindow::StartUpMrCloseAutoDomainSlot);
     connect(this->ui->action_open_close_reset, &QAction::triggered, this, &MainWindow::StartUpMrCloseAutoFactoryResetSlot);
-
-
     connect(this->ui->action_specmr_domain, &QAction::triggered, this, &MainWindow::SyncSpecMrDomainSlot);
     connect(this->ui->action_reset_cch, &QAction::triggered, this, &MainWindow::FactoryResetSlot);
     connect(this->ui->action_reset_specmr, &QAction::triggered, this, &MainWindow::RestartMrSlot);

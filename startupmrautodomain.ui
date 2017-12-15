@@ -140,7 +140,7 @@
        <widget class="QTextEdit" name="textEdit_status">
         <property name="font">
          <font>
-          <pointsize>14</pointsize>
+          <pointsize>12</pointsize>
          </font>
         </property>
        </widget>

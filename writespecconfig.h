@@ -2,6 +2,9 @@
 #define WRITESPECCONFIG_H
 
 #include <QDialog>
+#include "common.h"
+#include <QString>
+#include "basehttpclient.h"
 
 namespace Ui {
 class WriteSpecConfig;
@@ -16,8 +19,16 @@ public:
     ~WriteSpecConfig();
     void WriteSpecConfig_start();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::WriteSpecConfig *ui;
+    HttpClient::WriteSpecMrConfigInfoHttpRequest* m_write_specmr_info;
+
+private:
+    WriteSpecConfig(const WriteSpecConfig &);
+    const WriteSpecConfig & operator = (const WriteSpecConfig &);
 };
 
 #endif // WRITESPECCONFIG_H

@@ -2,6 +2,8 @@
 #define RESTARTMR_H
 
 #include <QDialog>
+#include <QString>
+#include "basehttpclient.h"
 
 namespace Ui {
 class RestartMr;
@@ -19,8 +21,13 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+public:
+    QString m_req_pro;
+    QString m_req_id;
+
 private:
     Ui::RestartMr *ui;
+    HttpClient::RestartSpecMrHttpReqest* m_restart_specmr;
 
 private:
     RestartMr(const RestartMr &);

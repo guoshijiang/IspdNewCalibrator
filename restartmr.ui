@@ -94,7 +94,15 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QTextEdit" name="textEdit_log"/>
+         <widget class="QTextEdit" name="textEdit_log">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -161,7 +169,13 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QTextEdit" name="textEdit_status"/>
+         <widget class="QTextEdit" name="textEdit_status">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>709</width>
+    <width>841</width>
     <height>617</height>
    </rect>
   </property>
@@ -40,20 +40,6 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_req_pro"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>ec</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_req_ec"/>
           </item>
          </layout>
         </item>
@@ -94,7 +80,15 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QTextEdit" name="textEdit_log"/>
+         <widget class="QTextEdit" name="textEdit_log">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

@@ -2,6 +2,8 @@
 #define FACTORYRESET_H
 
 #include <QDialog>
+#include <QString>
+#include "basehttpclient.h"
 
 namespace Ui {
 class FactoryReset;
@@ -19,8 +21,13 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+public:
+    QString m_req_pro;
+    QString m_req_id;
+
 private:
     Ui::FactoryReset *ui;
+    HttpClient::FactoryResetHttpReqest *m_factory_reset;
 
 private:
     FactoryReset(const FactoryReset &);
