@@ -2,7 +2,6 @@
 
 namespace HttpClient
 {
-    //class BaseHttpClien
     BaseHttpClient::BaseHttpClient()
     {
         httpRequest.setRawHeader("Accept-Encoding", "gzip, deflate");
@@ -41,7 +40,6 @@ namespace HttpClient
         reply->deleteLater();
     }
 
-    //UdpControlServerInfo
     UdpControlServerInfoHttpReq::UdpControlServerInfoHttpReq()
     {
 
@@ -150,7 +148,6 @@ namespace HttpClient
         this->checkCallback(false, udp_svr_data);
     }
 
-    //class StartUpMrAutoDomainHttpRequest
     StartUpMrAutoDomainHttpRequest::StartUpMrAutoDomainHttpRequest()
     {
 
@@ -217,7 +214,6 @@ namespace HttpClient
         this->checkCallback(false, open_domain);
     }
 
-    //class OpenCloseMrAutoFactoryResetHttpRequest
     OpenCloseMrAutoFactoryResetHttpRequest::OpenCloseMrAutoFactoryResetHttpRequest()
     {
 
@@ -281,7 +277,6 @@ namespace HttpClient
         this->checkCallback(false, ocmfr_freset);
     }
 
-    //class SyncSpecMrDomainHttpRequest
     SyncSpecMrDomainHttpRequest::SyncSpecMrDomainHttpRequest()
     {
 
@@ -350,7 +345,6 @@ namespace HttpClient
         this->checkCallback(false, sync_domain);
     }
 
-    //class FactoryResetHttpReqest
     FactoryResetHttpReqest::FactoryResetHttpReqest()
     {
 
@@ -402,7 +396,7 @@ namespace HttpClient
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
-                        if (value.isDouble())
+                        if(value.isDouble())
                         {
                             ec = value.toDouble();
                             factory_reset.insert("ec", ec);
@@ -417,7 +411,6 @@ namespace HttpClient
         this->checkCallback(false, factory_reset);
     }
 
-    //class RestartSpecMrHttpReqest
     RestartSpecMrHttpReqest::RestartSpecMrHttpReqest()
     {
 
@@ -483,8 +476,6 @@ namespace HttpClient
         this->checkCallback(false, restart_specmr);
     }
 
-
-    //class ReadSpecMrConfigInfoHttpReqest
     ReadSpecMrConfigInfoHttpReqest::ReadSpecMrConfigInfoHttpReqest()
     {
 
@@ -724,7 +715,6 @@ namespace HttpClient
         this->checkCallback(false, read_spec_mr_info);
     }
 
-    //class WriteSpecMrConfigInfoHttpRequest
     WriteSpecMrConfigInfoHttpRequest::WriteSpecMrConfigInfoHttpRequest()
     {
 
@@ -791,5 +781,105 @@ namespace HttpClient
         }
         QMap<QString, int>write_specmr;
         this->checkCallback(false, write_specmr);
+    }
+
+    GetMrReslutHttpReqest::GetMrReslutHttpReqest()
+    {
+
+    }
+    GetMrReslutHttpReqest::~GetMrReslutHttpReqest()
+    {
+
+    }
+
+    void GetMrReslutHttpReqest::GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback)
+    {
+        QString tag_id = this->m_get_tag_id;
+        QString url = GetMrResultData + "?pro=1009&tag_id=" + tag_id;;
+        this->checkCallback = callback;
+        this->get(url);
+    }
+
+    void GetMrReslutHttpReqest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
+    {
+        int pro;
+        QString tag_id, a_spped, gyroscope, hr, bat;
+        if(statusCode == 200)
+        {
+            qDebug() << "data = " << data;
+            QJsonParseError jsonError;
+            QJsonDocument json_doc = QJsonDocument::fromJson(data, &jsonError);
+
+            if(jsonError.error == QJsonParseError::NoError)
+            {
+                QMap<QString, QVariant> mr_result;
+                if(json_doc.isObject())
+                {
+                    QJsonObject json_obj = json_doc.object();
+                    if(json_obj.contains("pro"))
+                    {
+                        QJsonValue value = json_obj.value("pro");
+                        if (value.isDouble())
+                        {
+                            pro = value.toDouble();
+                            mr_result.insert("pro", pro);
+                        }
+                    }
+                    if(json_obj.contains("tag_id"))
+                    {
+                        QJsonValue value = json_obj.value("tag_id");
+                        if (value.isString())
+                        {
+                            tag_id = value.toString();
+                            mr_result.insert("tag_id", tag_id);
+                        }
+                    }
+
+                    if(json_obj.contains("a_speed"))
+                    {
+                        QJsonValue value = json_obj.value("a_speed");
+                        if (value.isString())
+                        {
+                            a_spped = value.toString();
+                            mr_result.insert("a_speed", a_spped);
+                        }
+                    }
+
+                    if(json_obj.contains("gyroscope"))
+                    {
+                        QJsonValue value = json_obj.value("gyroscope");
+                        if (value.isString())
+                        {
+                            gyroscope = value.toString();
+                            mr_result.insert("gyroscope", gyroscope);
+                        }
+                    }
+
+                    if(json_obj.contains("hr"))
+                    {
+                        QJsonValue value = json_obj.value("hr");
+                        if (value.isString())
+                        {
+                            hr = value.toString();
+                            mr_result.insert("hr", hr);
+                        }
+                    }
+
+                    if(json_obj.contains("bat"))
+                    {
+                        QJsonValue value = json_obj.value("bat");
+                        if (value.isString())
+                        {
+                            bat = value.toString();
+                            mr_result.insert("bat", bat);
+                        }
+                    }
+                }
+                this->checkCallback(true, mr_result);
+                return;
+            }
+        }
+        QMap<QString, QVariant>mr_result;
+        this->checkCallback(false, mr_result);
     }
 }

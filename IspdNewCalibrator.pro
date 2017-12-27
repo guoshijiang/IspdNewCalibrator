@@ -26,11 +26,9 @@ SOURCES += main.cpp\
     pugixml.cpp \
     parsexml.cpp \
     serialport.cpp \
-    baseui.cpp \
     protoserialport.cpp \
     dbinfo.cpp \
     encrypt.cpp \
-    autorecord.cpp \
     controlserverstutasinfo.cpp \
     readspecificconfig.cpp \
     writespecconfig.cpp \
@@ -39,7 +37,8 @@ SOURCES += main.cpp\
     syncspecmrdomain.cpp \
     startupmrautodomain.cpp \
     startupmrautofactoryreset.cpp \
-    basehttpclient.cpp
+    basehttpclient.cpp \
+    serialportwriteread.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -56,8 +55,6 @@ HEADERS  += mainwindow.h \
     protoserialport.h \
     dbinfo.h \
     encrypt.h \
-    baseui.hpp \
-    autorecord.h \
     controlserverstutasinfo.h \
     readspecificconfig.h \
     writespecconfig.h \
@@ -66,7 +63,8 @@ HEADERS  += mainwindow.h \
     syncspecmrdomain.h \
     startupmrautodomain.h \
     startupmrautofactoryreset.h \
-    basehttpclient.h
+    basehttpclient.h \
+    serialportwriteread.h
 
 FORMS    += mainwindow.ui \
     version.ui \

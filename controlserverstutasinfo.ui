@@ -34,7 +34,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>pro</string>
+             <string>数据类型标识</string>
             </property>
            </widget>
           </item>
@@ -106,7 +106,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>pro号</string>
+           <string>数据类型</string>
           </property>
          </widget>
         </item>
@@ -116,7 +116,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>ec状态码</string>
+           <string>状态码</string>
           </property>
          </widget>
         </item>
@@ -146,7 +146,7 @@
         <item row="4" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>reset</string>
+           <string>是否重置</string>
           </property>
          </widget>
         </item>

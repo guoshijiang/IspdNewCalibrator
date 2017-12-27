@@ -5,7 +5,6 @@ SerialPort::SerialPort()
 {
     this->m_read_time_out = 8000;
     this->m_write_time_out = 8000;
-
     this->m_set = new QSettings(g_path, QSettings::NativeFormat);
     QStringList key = this->m_set->allKeys();
     this->m_set_len = key.size();
@@ -157,7 +156,7 @@ int SerialPort::readData(char *msg, int msg_len)
     DWORD     byte_read  = 0;
     DWORD     d_error    = 0;
     COMSTAT   stat;
-    char buf[128]        = { 0 };
+    char buf[64]         = { 0 };
     if(this->m_hle_comm == INVALID_HANDLE_VALUE)
     {
         return -1;

@@ -38,7 +38,6 @@
 #include "encrypt.h"
 #include "controlserverstutasinfo.h"
 #include "readspecificconfig.h"
-#include "baseui.hpp"
 #include "serialport.h"
 #include "writespecconfig.h"
 #include "startupmrautodomain.h"
@@ -46,17 +45,17 @@
 #include "factoryreset.h"
 #include "restartmr.h"
 #include "syncspecmrdomain.h"
+#include "basehttpclient.h"
+#include "serialportwriteread.h"
 
-using namespace InterfaceUI;
-
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -68,7 +67,8 @@ public:
         return m_font;
     }
     void addAutoRecordUi(QString com_name);
-    void addMulRecordUi(QString com_name);
+    void AddMulChildUI(QString com_name);
+    void ReqestServerMrData(QString tag_id);
 
 public slots:
     void testAutoSlot();
@@ -81,7 +81,6 @@ public slots:
     void RecordSlot();
     void CheckComSlot();
     void CloseApp();
-
     void ControlServerStutasInfoSlot();
     void ReadSpecificConfigSlot();
     void WriteSpecConfigSlot();
@@ -90,10 +89,7 @@ public slots:
     void SyncSpecMrDomainSlot();
     void FactoryResetSlot();
     void RestartMrSlot();
-
-
     void m_ledit_textChanged(QString text);
-    void on_m_but_clicked();
 
 public:
     Ui::MainWindow *ui;
@@ -101,7 +97,6 @@ public:
     Question *m_question;
     Document *m_doc;
     SerialPortSet *m_port_set;
-    Encrypt *m_encrypt;
     ControlServerStutasInfo *m_css_info;
     ReadSpecificConfig *m_rsc_config;
     WriteSpecConfig *m_write_spec_config;
@@ -111,6 +106,8 @@ public:
     SyncSpecMrDomain *m_sync_spec_mr_domain;
     RestartMr *m_restart_spec_mr;
     FactoryReset *m_factory_reset;
+    HttpClient::GetMrReslutHttpReqest* m_mr_result;
+    SerialPortWriteRead* m_sport_wr;
 
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;

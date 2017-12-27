@@ -18,11 +18,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow), m_version(new Version),
     m_question(new Question), m_doc(new Document),
     m_port_set(new SerialPortSet), m_serial_port(new SerialPort),
-    m_encrypt(new Encrypt), m_css_info(new ControlServerStutasInfo),
+    m_css_info(new ControlServerStutasInfo),
     m_rsc_config(new ReadSpecificConfig), m_write_spec_config(new WriteSpecConfig),
     m_start_mr_auto_domain(new StartUpMrAutoDomain), m_start_mr_auto_freset(new StartUpMrAutoFactoryReset),
     m_sync_spec_mr_domain(new SyncSpecMrDomain), m_restart_spec_mr(new RestartMr),
-    m_factory_reset(new FactoryReset)
+    m_factory_reset(new FactoryReset), m_mr_result(new HttpClient::GetMrReslutHttpReqest),
+    m_sport_wr(new SerialPortWriteRead)
 {
     QScrollArea *pArea = new QScrollArea();
     QWidget *pWidget = new QWidget();
@@ -65,11 +66,6 @@ MainWindow::~MainWindow()
         delete this->m_serial_port;
         this->m_serial_port = NULL;
     }
-    if(this->m_encrypt != NULL)
-    {
-        delete this->m_encrypt;
-        this->m_encrypt = NULL;
-    }
     if(this->m_css_info != NULL)
     {
        delete this->m_css_info;
@@ -93,6 +89,7 @@ MainWindow::~MainWindow()
         delete this->m_start_mr_auto_domain;
         this->m_start_mr_auto_domain = NULL;
     }
+
     if(this->m_start_mr_auto_freset != NULL)
     {
         delete this->m_start_mr_auto_freset;
@@ -115,6 +112,18 @@ MainWindow::~MainWindow()
     {
         delete this->m_factory_reset;
         this->m_factory_reset = NULL;
+    }
+
+    if(this->m_mr_result != NULL)
+    {
+        delete this->m_mr_result;
+        this->m_mr_result = NULL;
+    }
+
+    if(this->m_sport_wr != NULL)
+    {
+        delete this->m_sport_wr;
+        this->m_sport_wr = NULL;
     }
 }
 
@@ -188,7 +197,6 @@ void MainWindow::StartUpMrCloseAutoDomainSlot()
     this->m_start_mr_auto_domain->StartUpMrAutoDomain_start();
 }
 
-
 void MainWindow::StartUpMrCloseAutoFactoryResetSlot()
 {
     this->m_start_mr_auto_freset->StartUpMrAutoFactoryReset_start();
@@ -238,35 +246,53 @@ void MainWindow::start()
         m_serial_port->getSerialPortList(i, "value");
         m_com_list << this->m_serial_port->m_comm_result;
     }
-
-    /*
-    this->ui->groupBox_record->setLayout(m_main_layout);
+    this->ui->groupBox_check->setLayout(m_main_layout);
 
     for(int i = 0; i < m_com_list.size(); ++i)
     {
         if(m_com_list[i] != "COM1")
         {
-            this->addAutoRecordUi(m_com_list[i]);
+            this->m_sport_wr->EnterAppConfig(m_com_list[i]);
+            this->m_sport_wr->GetIspdTagId();
+            this->m_sport_wr->GetHzVersionTagId();
+            this->m_sport_wr->GetSensor();
+            this->m_sport_wr->ExitAppConfig();
         }
         else
         {
             continue;
         }
     }
-    */
+}
 
-    this->ui->groupBox_Mul_Recoed->setLayout(m_main_layout);
-    for(int i = 0; i < m_com_list.size(); ++i)
+//获取传感器发送给基站的数据
+void MainWindow::ReqestServerMrData(QString tag_id)
+{
+    this->m_mr_result->m_get_tag_id = tag_id;
+    this->m_mr_result->GetMrResult([&](bool success, QMap<QString, QVariant>mr_result)
     {
-        if(m_com_list[i] != "COM1")
-        {
-            this->addMulRecordUi(m_com_list[i]);
-        }
-        else
-        {
-            continue;
-        }
-    }
+       qDebug() << "enter there !" ;
+       if(success)
+       {
+           int req_pro = mr_result["pro"].toInt();
+           qDebug() << "req_pro = " <<req_pro;
+
+           QString req_tag_id = mr_result["tag_id"].toString();
+           qDebug() << "req_tag_id = " << req_tag_id;
+
+           QString req_a_speed = mr_result["a_speed"].toString();
+           qDebug() << "req_a_speed = " << req_a_speed;
+
+           QString req_gyroscope = mr_result["gyroscope"].toString();
+           qDebug() << "req_gyroscope = " << req_gyroscope;
+
+           QString req_hr = mr_result["hr"].toString();
+           qDebug() << "req_hr = " << req_hr;
+
+           QString req_bat = mr_result["bat"].toString();
+           qDebug() << "req_bat = " << req_bat;
+       }
+    });
 }
 
 void MainWindow::addAutoRecordUi(QString com_name)
@@ -294,46 +320,6 @@ void MainWindow::addAutoRecordUi(QString com_name)
     connect(this->m_ledit, SIGNAL(textChanged(QString)), SLOT(m_ledit_textChanged(QString)));
 }
 
-
-
-void MainWindow::addMulRecordUi(QString com_name)
-{
-    this->m_page = new QWidget;
-    this->m_layout = new QGridLayout(m_page);
-
-    this->m_label = new QLabel;
-    this->m_label->setText(com_name);
-    this->m_label->setFont(font());
-
-    this->m_ledit = new QLineEdit;
-    this->m_ledit->setFont(font());
-    this->m_mul_record_list.push_back(this->m_ledit);
-
-    this->m_but = new QPushButton;
-    this->m_but->setText("record");
-    this->m_but->setFont(font());
-
-    this->m_layout->addWidget(m_label, 0, 1);
-    this->m_layout->addWidget(m_ledit, 0, 2);
-    this->m_layout->addWidget(m_but, 0, 3);
-
-    this->m_page->setLayout(m_layout);
-
-    this->m_vbox_layout->insertWidget(m_vbox_layout->count()-1, m_page);
-
-    this->m_ledit->setObjectName(com_name);
-    this->m_but->setObjectName(com_name);
-
-    connect(m_but, SIGNAL(clicked()), this, SLOT(on_m_but_clicked()));
-}
-
-void MainWindow::on_m_but_clicked()
-{
-    QObject *obj = QObject::sender();
-    QString senderobjName = obj->objectName();
-    qDebug() << senderobjName;
-}
-
 void MainWindow::m_ledit_textChanged(QString text)
 {
     QObject *obj = QObject::sender();
@@ -347,77 +333,171 @@ void MainWindow::m_ledit_textChanged(QString text)
 
         if(this->m_com_list[k] == senderobjName)
         {
-            QString f_com_name = m_com_list[k];
-            QByteArray to_data = f_com_name.toLatin1();
-            char* com_str = to_data.data();
-            qDebug() << "com_str = " << com_str;
-            bool ret = this->m_serial_port->initSerilPort(com_str, 230400, 'N', 8, 1);
-            if(ret == false)
-            {
-                qDebug() << "init fail !";
-            }
-            else
-            {
-                //预配置
-                QByteArray pre_array;
-                quint8 pre_write = 0xFF;
-                quint8 cnt = 15;
-                while (cnt--)
-                {
-                    pre_array.append(pre_write);
-                }
-
-                SerialPort::Data data;
-                data.buffer = pre_array;
-                data.length = pre_array.length();
-                int ok = this->m_serial_port->writeData(data);
-                if(ok == -1)
-                {
-                    qDebug() << "write fail !";
-                }
-                else
-                {
-                    qDebug() << "write succes !";
-                }
-
-                //进入配置模式
-                protoserialport::ReqPkg cus_pkg(protoserialport::REQ_TYPE::ISPD_MODULE_CUSTOMISE);
-                QByteArray send_cus_pkg = cus_pkg.toBinary();
-                data.buffer = send_cus_pkg.data();
-                data.length =send_cus_pkg.length();
-                int ok1 = this->m_serial_port->writeData(data);
-                if(ok1 == -1)
-                {
-                    qDebug() << "write 1 fail !";
-                }
-                else
-                {
-                    qDebug() << "write 1 succes !";
-                }
-
-                //录入ID
-                QString q_ispd = text;
-                std::string current_sign_id = q_ispd.toStdString();
-                qint32 ispd_id_dencrypt = this->m_encrypt->dencrypt_ispd_id(current_sign_id);
-                protoserialport::IspdID ispd_id(ispd_id_dencrypt, protoserialport::REQ_TYPE::ISPD_WR_ID);
-                protoserialport::ReqMsg<protoserialport::IspdID> res_msg(ispd_id);
-                QByteArray send_id = res_msg.toBinary();
-                data.buffer = send_id.data();
-                data.length =  send_id.length();
-                int ok2 = this->m_serial_port->writeData(data);
-                if(ok2 == -1)
-                {
-                    qDebug() << "write 2 fail !";
-                }
-                else
-                {
-                    qDebug() << "write 2 succes !";
-                }
-            }
-        }
-    }
+            //id的录入在这里进行
+        }  
+    } 
 }
 
+void MainWindow::AddMulChildUI(QString com_name)
+{
+    QWidget *page = new QWidget;
+
+    QGroupBox *all_group = new QGroupBox;
+    all_group->setTitle(com_name);
+    all_group->setFont(font());
+
+    QVBoxLayout *all_box = new QVBoxLayout(all_group);
+
+    QVBoxLayout *vbox = new QVBoxLayout();
+
+    QGroupBox *con_group = new QGroupBox;
+    QGridLayout *layout_config = new QGridLayout(con_group);
+
+    con_group->setTitle(UTF8BIT("配置信息"));
+    con_group->setFont(font());
+
+    QLabel *ispd_id = new QLabel;
+    ispd_id->setText(UTF8BIT("标签"));
+
+    QLabel *sam_rate = new QLabel;
+    sam_rate->setText(UTF8BIT("采用率"));
+
+    QLabel *version = new QLabel;
+    version->setText(UTF8BIT("版本号"));
+
+    QLineEdit *ispd_id_edit = new QLineEdit;
+    QLineEdit *sam_rate_edit = new QLineEdit;
+    QLineEdit *version_edit = new QLineEdit;
+
+    layout_config->addWidget(ispd_id, 0, 1);
+    layout_config->addWidget(ispd_id_edit, 0, 2);
+
+    layout_config->addWidget(sam_rate, 1, 1);
+    layout_config->addWidget(sam_rate_edit, 1, 2);
+
+    layout_config->addWidget(version, 2, 1);
+    layout_config->addWidget(version_edit, 2, 2);
+
+    QGroupBox *hr_group = new QGroupBox;
+    QGridLayout *layout_hr = new QGridLayout(hr_group);
+    hr_group->setTitle(UTF8BIT("心率"));
+    hr_group->setFont(font());
+
+    QLabel *hr_label = new QLabel;
+    hr_label->setText(UTF8BIT("读取心率"));
+
+    QLabel *hr_one = new QLabel;
+    hr_one->setText(UTF8BIT("第一次"));
+
+    QLabel *hr_two = new QLabel;
+    hr_two->setText(UTF8BIT("第二次"));
+
+    QLabel *hr_three = new QLabel;
+    hr_three->setText(UTF8BIT("第三次"));
+
+    QLabel *hr_avg = new QLabel;
+    hr_avg->setText(UTF8BIT("平均值"));
+
+    QLineEdit *hr_edit_one = new QLineEdit;
+    QLineEdit *hr_edit_two = new QLineEdit;
+    QLineEdit *hr_edit_three = new QLineEdit;
+    QLineEdit *hr_edit_avg = new QLineEdit;
+
+    layout_hr->addWidget(hr_label, 2, 1);
+
+    layout_hr->addWidget(hr_one, 1, 2);
+    layout_hr->addWidget(hr_two, 1, 3);
+    layout_hr->addWidget(hr_three, 1, 4);
+    layout_hr->addWidget(hr_avg, 1, 5);
+
+    layout_hr->addWidget(hr_edit_one, 2, 2);
+    layout_hr->addWidget(hr_edit_two, 2, 3);
+    layout_hr->addWidget(hr_edit_three, 2, 4);
+    layout_hr->addWidget(hr_edit_avg, 2, 5);
+
+    QGroupBox *compare_group = new QGroupBox;
+    QGridLayout *layout_datapare = new QGridLayout(compare_group);
+    compare_group->setTitle(UTF8BIT("对比数据"));
+    compare_group->setFont(font());
+
+    QLabel *seriport_ret = new QLabel;
+    seriport_ret->setText(UTF8BIT("串口结果"));
+
+    QLabel *mr_ret = new QLabel;
+    mr_ret->setText(UTF8BIT("基站结果"));
+
+    QLabel *comp_ret = new QLabel;
+    comp_ret->setText(UTF8BIT("对比结果"));
+
+    QLabel *a_speed = new QLabel;
+    a_speed->setText(UTF8BIT("加速度"));
+
+    QLineEdit *edit_a_seripor = new QLineEdit;
+    QLineEdit *edit_a_mr = new QLineEdit;
+    QLineEdit *edit_a_comp = new QLineEdit;
+
+    QLabel *gyro = new QLabel;
+    gyro->setText(UTF8BIT("陀螺仪"));
+
+    QLineEdit *edit_gyro_seripor = new QLineEdit;
+    QLineEdit *edit_gyro_mr = new QLineEdit;
+    QLineEdit *edit_gyro_comp = new QLineEdit;
+
+    QLabel *heart_rate = new QLabel;
+    heart_rate->setText(UTF8BIT("心率"));
+
+    QLineEdit *edit_hr_seripor = new QLineEdit;
+    QLineEdit *edit_hr_mr = new QLineEdit;
+    QLineEdit *edit_hr_comp = new QLineEdit;
+
+    QLabel *bat = new QLabel;
+    bat->setText(UTF8BIT("电量"));
+
+    QLineEdit *edit_bat_seripor = new QLineEdit;
+    QLineEdit *edit_bat_mr = new QLineEdit;
+    QLineEdit *edit_bat_comp = new QLineEdit;
+
+    QLabel *charge = new QLabel;
+    charge->setText(UTF8BIT("充电状态"));
+
+    QLineEdit *edit_charge = new QLineEdit;
+
+    layout_datapare->addWidget(seriport_ret, 0, 2);
+    layout_datapare->addWidget(mr_ret, 0, 3);
+    layout_datapare->addWidget(comp_ret, 0, 4);
 
 
+    layout_datapare->addWidget(a_speed, 1, 1);
+    layout_datapare->addWidget(edit_a_seripor, 1, 2);
+    layout_datapare->addWidget(edit_a_mr, 1, 3);
+    layout_datapare->addWidget(edit_a_comp, 1, 4);
 
+    layout_datapare->addWidget(gyro, 2, 1);
+    layout_datapare->addWidget(edit_gyro_seripor, 2, 2);
+    layout_datapare->addWidget(edit_gyro_mr, 2, 3);
+    layout_datapare->addWidget(edit_gyro_comp, 2, 4);
+
+    layout_datapare->addWidget(heart_rate, 3, 1);
+    layout_datapare->addWidget(edit_hr_seripor, 3, 2);
+    layout_datapare->addWidget(edit_hr_mr, 3, 3);
+    layout_datapare->addWidget(edit_hr_comp, 3, 4);
+
+    layout_datapare->addWidget(bat, 4, 1);
+    layout_datapare->addWidget(edit_bat_seripor, 4, 2);
+    layout_datapare->addWidget(edit_bat_mr, 4, 3);
+    layout_datapare->addWidget(edit_bat_comp, 4, 4);
+
+    layout_datapare->addWidget(charge, 5, 1);
+    layout_datapare->addWidget(edit_charge, 5, 2);
+
+
+    all_box->addWidget(con_group);
+    all_box->addWidget(hr_group);
+    all_box->addWidget(compare_group);
+
+    vbox->addWidget(all_group);
+
+    page->setLayout(vbox);
+
+    m_vbox_layout->insertWidget(m_vbox_layout->count()-1, page);
+}

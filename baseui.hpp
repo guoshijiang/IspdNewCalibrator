@@ -77,6 +77,7 @@ namespace InterfaceUI
     public:
        RecordUI() : BaseUI()
        {
+
        }
        virtual ~RecordUI()
        {
@@ -356,6 +357,8 @@ namespace InterfaceUI
 
            m_vbox_layout->insertWidget(m_vbox_layout->count()-1, page);
        }
+
+
        virtual void getValueFromUI()
        {
 

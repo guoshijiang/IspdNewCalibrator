@@ -23,14 +23,15 @@ using namespace std;
 
 namespace HttpClient
 {
-    const QString OpenDomainUrl = QString("http://192.168.32.105:8088/api/calibrator/openclosedomain");
-    const QString UdpControlUrl = QString("http://192.168.32.105:8088/api/calibrator/getudpsvrdata");
-    const QString SpecMrFactoryResetUrl = QString("http://192.168.32.105:8088/api/calibrator/openclosedomain");
-    const QString SyncSpecMrDomainUrl = QString("http://192.168.32.105:8088/api/calibrator/syncdomain");
-    const QString FactoryResetUrl = QString("http://192.168.32.105:8088/api/calibrator/resetmrfactory");
-    const QString RestartSpecUrl = QString("http://192.168.32.105:8088/api/calibrator/restartspecmr");
-    const QString ReadSpecMrInfoUrl = QString("http://192.168.32.105:8088/api/calibrator/getspecmrcondata");
-    const QString WriteSpecMrInfoUrl = QString("http://192.168.32.105:8088/api/calibrator/setspecmrcondata");
+    const QString OpenDomainUrl = QString("http://192.168.90.113:8088/api/calibrator/openclosedomain");
+    const QString UdpControlUrl = QString("http://192.168.90.113:8088/api/calibrator/getudpsvrdata");
+    const QString SpecMrFactoryResetUrl = QString("http://192.168.90.113:8088/api/calibrator/openclosedomain");
+    const QString SyncSpecMrDomainUrl = QString("http://192.168.90.113:8088/api/calibrator/syncdomain");
+    const QString FactoryResetUrl = QString("http://192.168.90.113:8088/api/calibrator/resetmrfactory");
+    const QString RestartSpecUrl = QString("http://192.168.90.113:8088/api/calibrator/restartspecmr");
+    const QString ReadSpecMrInfoUrl = QString("http://192.168.90.113:8088/api/calibrator/getspecmrcondata");
+    const QString WriteSpecMrInfoUrl = QString("http://192.168.90.113:8088/api/calibrator/setspecmrcondata");
+    const QString GetMrResultData = QString("http://192.168.90.113:8088/api/calibrator/mrresultdata");
 
     typedef struct _WriteSpecMr
     {
@@ -248,6 +249,25 @@ namespace HttpClient
     private:
         WriteSpecMrConfigInfoHttpRequest(const WriteSpecMrConfigInfoHttpRequest &);
         const WriteSpecMrConfigInfoHttpRequest & operator = (const WriteSpecMrConfigInfoHttpRequest &);
+    };
+
+    class GetMrReslutHttpReqest : public BaseHttpClient
+    {
+    public:
+        GetMrReslutHttpReqest();
+        ~GetMrReslutHttpReqest();
+        void GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback);
+
+    protected:
+        void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+    public:
+        QString m_get_tag_id;
+    private:
+         std::function<void(bool, QMap<QString, QVariant>)> checkCallback;
+
+    private:
+        GetMrReslutHttpReqest(const GetMrReslutHttpReqest &);
+        const GetMrReslutHttpReqest & operator = (const GetMrReslutHttpReqest &);
     };
 }
 #endif // BASEHTTPCLIENT_H
