@@ -53,6 +53,14 @@ namespace Ui
     class MainWindow;
 }
 
+typedef struct ServerHttpReqData
+{
+    QString mr_a_speed;
+    QString mr_gyroscope;
+    QString mr_hr;
+    QString mr_charge;
+}ServerMrData;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -67,8 +75,8 @@ public:
         return m_font;
     }
     void addAutoRecordUi(QString com_name);
-    void AddMulChildUI(QString com_name);
-    void ReqestServerMrData(QString tag_id);
+    void AddMulChildUI(QString com_name, CheckData checkdata);
+    void ServerDataHttpRequest(QString tag_id);
 
 public slots:
     void testAutoSlot();
@@ -89,7 +97,12 @@ public slots:
     void SyncSpecMrDomainSlot();
     void FactoryResetSlot();
     void RestartMrSlot();
-    void m_ledit_textChanged(QString text);
+    void m_record_ledit_textChanged(QString text);
+
+    void onCheckSuccLogMessage(const QString & msg);
+    void onCheckFailLogMessage(const QString & msg);
+    void onRecordSuccLogMsg(const QString & msg);
+    void onRecordFailMsg(const QString & msg);
 
 public:
     Ui::MainWindow *ui;
@@ -108,20 +121,33 @@ public:
     FactoryReset *m_factory_reset;
     HttpClient::GetMrReslutHttpReqest* m_mr_result;
     SerialPortWriteRead* m_sport_wr;
+    SerialPort *m_serial_port;
 
+
+    //主要控件
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
 
-    QWidget *m_page;
-    QGridLayout *m_layout;
-    QLineEdit *m_ledit;
-    QLabel *m_label;
+    //录入标签相关的控件
+    QWidget *m_record_page;
+    QGridLayout *m_record_layout;
+    QLineEdit *m_record_ledit;
+    QLabel *m_record_label;
     QPushButton *m_but;
-
-    SerialPort *m_serial_port;
-    QStringList m_com_list;
     QList<QLineEdit*> m_auto_record_list;
-    QList<QLineEdit*> m_mul_record_list;
+
+    QStringList m_com_list;
+
+private:
+    unsigned int m_check_upload_process;
+    unsigned int m_ispd_num;
+    unsigned int m_check_upload_rate;
+
+private slots:
+    void on_pushButton_start_record_clicked();
+    void on_pushButton_start_check_clicked();
+    void on_pushButton_clear_check_clicked();
+    void on_pushButton_clear_record_clicked();
 };
 
 #endif // MAINWINDOW_H

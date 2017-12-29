@@ -5,8 +5,8 @@
 #include <QByteArray>
 
 //字体样式的定义
-#define MESSAGE_RED "<font size = 200 color = red ><strong>"
-#define MESSAGE_GREEN "<font size = 200 color = blue ><strong>"
+#define MESSAGE_RED "<font color = red ><strong>"
+#define MESSAGE_GREEN "<font color = blue ><strong>"
 #define MESSAGE_END "</strong></font>"
 
 #define MESSAGE_SUC "<font color=green><strong>"

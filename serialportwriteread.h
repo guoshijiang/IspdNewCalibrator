@@ -10,14 +10,6 @@
 #include "common.h"
 #include "encrypt.h"
 
-typedef struct _ServerMrData
-{
-    QString mr_a_speed;   //基站加速度
-    QString mr_gyroscope; //基站陀螺仪
-    QString mr_hr;        //基站心率
-    QString mr_charge;    //基站电量
-}ServerMrData;
-
 typedef struct _HeartRateData
 {
     QString hr_first;   //第一次获取到的心率
@@ -41,13 +33,13 @@ typedef struct _CheckData
     QString tag_id;           //标签号
     QString hz;               //采样率
     QString version;          //版本号
-    ServerMrData svrMrRelust; //基站数据
     HeartRateData hrResult;   //心率数据
     SerilPortData spResult;   //串口数据
 }CheckData;
 
-class SerialPortWriteRead
+class SerialPortWriteRead : public QObject
 {
+     Q_OBJECT
 public:
     SerialPortWriteRead();
     SerialPortWriteRead(QString com_name);
@@ -63,10 +55,24 @@ public:
     int GetSensor();
     int GetHzVersionTagId();
 
+public slots:
+
+signals:
+    void sendRecordSuccLogMessage(const QString & msg);
+    void sendRecordFailLogMessage(const QString & msg);
+
+    void sendCheckSuccLogMessage(const QString & msg);
+    void sendCheckFailLogMessage(const QString & msg);
+
 public:
     SerialPort *m_serial_port;
     Encrypt *m_encrypt;
     CheckData m_check_data;
+    QString m_com_name;
+    QString m_ispd_id;
+    QString m_fail_log;
+    QString m_succ_log;
+
 private:
     SerialPortWriteRead(const SerialPortWriteRead &);
     const SerialPortWriteRead & operator = (const SerialPortWriteRead &);
