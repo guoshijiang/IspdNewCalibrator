@@ -32,33 +32,23 @@
         <item>
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>目的终端ID</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_req_mr_id"/>
+          </item>
+          <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>静态IP地址</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_pro"/>
-          </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_mr_id"/>
-          </item>
-          <item row="2" column="1">
            <widget class="QLineEdit" name="lineEdit_req_jip">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -68,47 +58,65 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>静态子网掩码</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_childnet_code"/>
+          </item>
+          <item row="3" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>静态默认网关</string>
             </property>
            </widget>
           </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_req_gateway"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>静态DNS地址</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_dns"/>
+          </item>
           <item row="5" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>静态DNS服务器</string>
+             <string>服务器域名地址</string>
             </property>
            </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_sever_yuming"/>
           </item>
           <item row="6" column="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>目标服务地址</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
            <widget class="QLabel" name="label_8">
             <property name="text">
              <string>TCP端口号</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="0">
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="lineEdit_req_tp"/>
+          </item>
+          <item row="7" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>UDP端口号</string>
             </property>
            </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="lineEdit_req_up"/>
           </item>
           <item row="9" column="0">
            <widget class="QLabel" name="label_10">
@@ -116,24 +124,6 @@
              <string>网络选择模式</string>
             </property>
            </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_childnet_code"/>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_gateway"/>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_dns_ip"/>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_svr_ip"/>
-          </item>
-          <item row="7" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_tp"/>
-          </item>
-          <item row="8" column="1">
-           <widget class="QLineEdit" name="lineEdit_req_up"/>
           </item>
           <item row="9" column="1">
            <widget class="QLineEdit" name="lineEdit_network_select"/>
@@ -147,6 +137,16 @@
           </item>
           <item row="10" column="1">
            <widget class="QLineEdit" name="lineEdit_req_time"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>终端软件版本信息</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="lineEdit_version"/>
           </item>
          </layout>
         </item>
@@ -166,81 +166,10 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>终端配置信息写入流程记录</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QTextEdit" name="textEdit">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="font">
-        <font>
-         <pointsize>18</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>终端配置信息写入服务器响应</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_pro"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>状态码</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_ec"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="font">

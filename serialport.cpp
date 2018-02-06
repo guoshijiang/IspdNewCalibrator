@@ -3,8 +3,8 @@
 
 SerialPort::SerialPort()
 {
-    this->m_read_time_out = 8000;
-    this->m_write_time_out = 8000;
+    this->m_read_time_out = 5000;
+    this->m_write_time_out = 5000;
     this->m_set = new QSettings(g_path, QSettings::NativeFormat);
     QStringList key = this->m_set->allKeys();
     this->m_set_len = key.size();
@@ -13,7 +13,7 @@ SerialPort::SerialPort()
 SerialPort::~SerialPort()
 {  
     delete this->m_set;
-    //this->ClosePort();
+    this->ClosePort();
 }
 
 int SerialPort::getSerialPortList(int index, QString key_or_value)

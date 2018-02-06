@@ -17,6 +17,7 @@ public:
     explicit StartUpMrAutoFactoryReset(QWidget *parent = 0);
     ~StartUpMrAutoFactoryReset();
     void StartUpMrAutoFactoryReset_start();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

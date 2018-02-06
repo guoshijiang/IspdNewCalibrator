@@ -18,6 +18,7 @@ public:
     explicit StartUpMrAutoDomain(QWidget *parent = 0);
     ~StartUpMrAutoDomain();
     void StartUpMrAutoDomain_start();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

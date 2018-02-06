@@ -15,6 +15,7 @@ public:
     explicit Question(QWidget *parent = 0);
     ~Question();
     void qus_start();
+    void CloseApp();
 
 private:
     Ui::Question *ui;

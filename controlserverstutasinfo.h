@@ -39,16 +39,17 @@ public:
         return m_font;
     }
     void UdpSvrDataUi(QString key_name, QString value_name);
+    void CloseApp();
+    void getUdpControl();
 
 private slots:
-    void on_lineEdit_pro_textChanged(const QString &arg1);
-    void on_pushButton_clicked();
 
 private:
     Ui::ControlServerStutasInfo* ui;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
 public:
-    QString m_req_pro;
+    QScrollArea *p_area;
+    QWidget *p_widget;
 
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
@@ -57,6 +58,8 @@ public:
     QGridLayout *m_layout;
     QLineEdit *m_ledit;
     QLabel *m_label;
+
+    QString m_req_pro;
 
 private:
     ControlServerStutasInfo(const ControlServerStutasInfo &);

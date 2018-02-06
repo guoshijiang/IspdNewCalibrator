@@ -21,6 +21,11 @@ SerialPortSet::~SerialPortSet()
     delete m_sport_xml;
 }
 
+void SerialPortSet::CloseApp()
+{
+    this->close();
+}
+
 void SerialPortSet::serPort_start()
 {
     int ret = this->init();

@@ -17,6 +17,11 @@ Version::~Version()
     delete ui;
 }
 
+void Version::CloseApp()
+{
+    this->close();
+}
+
 void Version::ver_start()
 {
     this->setWindowIcon(QIcon(":/versions.png"));

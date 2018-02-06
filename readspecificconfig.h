@@ -18,12 +18,13 @@ public:
     explicit ReadSpecificConfig(QWidget *parent = 0);
     ~ReadSpecificConfig();
     void ReadSpecConfig_start();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();
 
 public:
-    QString m_req_pro;
+    QString m_mid;
 
 private:
     Ui::ReadSpecificConfig *ui;

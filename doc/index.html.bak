@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<title>软件操作文档</title>
+		<meta name="keywords" content="软件文档"/>
+		<meta name="baidu-site-verification" content="6rvoVnfizY" />
+		<link href="./css/bootstrap.css" rel="stylesheet" type="text/css">
+		<link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" type="text/css" href="./css/base.css">
+		<link rel="stylesheet" type="text/css" href="./css/index.css">
+		<script src="./js/bootstrap.js"></script>
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+	</head>
+	<body>	
+		<div class="biaoti">软件操作文档</div>
+		<div class="version">
+			<table class="tabeindex">  
+			  <caption class="vertitle">版本说明</caption>  
+			  <tr class="rows">  
+				<td class="bhead">日期</td>  
+				<td class="bhead">版本</td>  
+				<td class="bhead">作者</td> 
+				<td class="bhead">说明</td>  				
+			  </tr>  
+			  <tr class = rows>  
+				<td class="bcontent">20180102</td>  
+				<td class="bcontent">v1.0.0</td>  
+				<td class="bcontent">郭世江</td>
+				<td class="bcontent">首次创建</td>  				
+			  </tr>  
+			  <tr class = rows>  
+				<td class="bcontent">20180105</td>  
+				<td class="bcontent">v1.0.1</td>  
+				<td class="bcontent">郭世江</td>
+				<td class="bcontent">接通服务端获取传感器数据接口</td>  				
+			  </tr> 
+			  <tr class = rows>  
+				<td class="bcontent">20180105</td>  
+				<td class="bcontent">v1.0.2</td>  
+				<td class="bcontent">郭世江</td>
+				<td class="bcontent">加入软件操作文档</td>  				
+			  </tr> 
+			</table>  
+		</div>
+		<div class="base_intro">
+			<h3>软件介绍</h3>
+			<p class="centent">
+				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp本文档用于叙述超级板上位机所实现的功能及其运行环境，以便使用者了解本软件的使用范围和使用方法。
+		    </p>
+			<p class="centent">
+				&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp本软件运行于配备windows电脑的生产超级板工厂环境。依赖于windows的串口通信，为使用者提供超级板ID号批量录入，以及批量测试心率值和批量自动化对比串口通信与终端通信结果等功能；对比结果通过方能出厂销售该超级板。
+			</p>
+		</div>
+
+		<div class="index">
+			<h3>软件使用说明</h3>
+			<ul class="ordered">
+				<li class="orderli"><a href="./question.html">1.录入标签</a></li>
+				<li class="orderli"><a href="#">2.检测通信</a></li>
+				<li class="orderli"><a href="#">3.串口通信设置</a></li>
+				<li class="orderli"><a href="#">4.开启或者关闭接入终端自动同步domain功能</a></li>
+				<li class="orderli"><a href="#">5.开启或者关闭接入终端自动恢复出厂设置功能</a></li>
+				<li class="orderli"><a href="#">6.同步指定终端domain功能</a></li>
+				<li class="orderli"><a href="#">7.恢复指定终端出厂设置</a></li>
+				<li class="orderli"><a href="#">8.重启指定终端</a></li>
+				<li class="orderli"><a href="#">9.读指定终端配置信息</a></li>
+				<li class="orderli"><a href="#">10.写指定终端配置信息</a></li>
+				<li class="orderli"><a href="#">11.获取UDP服务控制信息</a></li>
+				<li class="orderli"><a href="#">12.操作文档</a></li>
+				<li class="orderli"><a href="#">13.常见问题</a></li>
+				<li class="orderli"><a href="#">14.软件退出</a></li>
+				<li class="orderli"><a href="#">15.软件配置中心</a></li>
+			</ul>
+		</div>
+	</body>
+	
+</html>

@@ -18,6 +18,11 @@ StartUpMrAutoFactoryReset::~StartUpMrAutoFactoryReset()
     }
 }
 
+void StartUpMrAutoFactoryReset::CloseApp()
+{
+    this->close();
+}
+
 void StartUpMrAutoFactoryReset::StartUpMrAutoFactoryReset_start()
 {
     this->setWindowIcon(QIcon(":/openreset.png"));

@@ -17,6 +17,7 @@ public:
     explicit RestartMr(QWidget *parent = 0);
     ~RestartMr();
     void RestartMrInit();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

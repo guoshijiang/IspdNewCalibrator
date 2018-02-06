@@ -26,6 +26,7 @@ public:
        const char* buffer;
        size_t length;
     }Data;
+
 public:
     SerialPort();
     ~SerialPort();

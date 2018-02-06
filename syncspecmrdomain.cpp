@@ -18,6 +18,11 @@ SyncSpecMrDomain::~SyncSpecMrDomain()
     }
 }
 
+void SyncSpecMrDomain::CloseApp()
+{
+    this->close();
+}
+
 void SyncSpecMrDomain::SyncSpecMrDomainInit()
 {
     this->setWindowIcon(QIcon(":/synchronization.png"));

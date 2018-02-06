@@ -30,6 +30,8 @@
 #include <QByteArray>
 #include <QToolBox>
 #include <QTimer>
+#include <QMessageBox>
+#include <QPalette>
 
 #include "version.h"
 #include "question.h"
@@ -74,20 +76,28 @@ public:
         QFont m_font("宋体", 18, 75);
         return m_font;
     }
-    void addAutoRecordUi(QString com_name);
-    void AddMulChildUI(QString com_name, CheckData checkdata);
-    void ServerDataHttpRequest(QString tag_id);
+
+    inline QString Succ()
+    {
+        return UTF8BIT("比对成功");
+    }
+
+    inline QString Fail()
+    {
+        return UTF8BIT("比对失败");
+    }
+
+    //void addAutoRecordUi(QString com_name);
+    //void CheckTest(QString com_name);
+    void UIinit();
+    void CompareData();
+    void fontSet();
 
 public slots:
-    void testAutoSlot();
-    void testMulSlot();
     void VersionSlot();
     void QuestionSlot();
     void DocSlot();
     void SerialPortSlot();
-    void TogetherTestSlot();
-    void RecordSlot();
-    void CheckComSlot();
     void CloseApp();
     void ControlServerStutasInfoSlot();
     void ReadSpecificConfigSlot();
@@ -97,10 +107,8 @@ public slots:
     void SyncSpecMrDomainSlot();
     void FactoryResetSlot();
     void RestartMrSlot();
-    void m_record_ledit_textChanged(QString text);
+    //void m_record_ledit_textChanged(QString text);
 
-    void onCheckSuccLogMessage(const QString & msg);
-    void onCheckFailLogMessage(const QString & msg);
     void onRecordSuccLogMsg(const QString & msg);
     void onRecordFailMsg(const QString & msg);
 
@@ -123,7 +131,6 @@ public:
     SerialPortWriteRead* m_sport_wr;
     SerialPort *m_serial_port;
 
-
     //主要控件
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
@@ -138,16 +145,16 @@ public:
 
     QStringList m_com_list;
 
+     QElapsedTimer m_tim;
+
+private slots:
+    void on_pushButton_test_clicked();
+    void on_lineEdit_id_textChanged(QString text);
+
 private:
     unsigned int m_check_upload_process;
     unsigned int m_ispd_num;
     unsigned int m_check_upload_rate;
-
-private slots:
-    void on_pushButton_start_record_clicked();
-    void on_pushButton_start_check_clicked();
-    void on_pushButton_clear_check_clicked();
-    void on_pushButton_clear_record_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -20,6 +20,11 @@ StartUpMrAutoDomain::~StartUpMrAutoDomain()
     delete this->m_sumad_req;
 }
 
+void StartUpMrAutoDomain::CloseApp()
+{
+    this->close();
+}
+
 void StartUpMrAutoDomain::StartUpMrAutoDomain_start()
 {
     this->setWindowIcon(QIcon(":/opendomain.png"));

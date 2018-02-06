@@ -1,6 +1,7 @@
 ﻿#include "serialportwriteread.h"
 
-SerialPortWriteRead::SerialPortWriteRead() : m_serial_port(new SerialPort), m_encrypt(new Encrypt)
+SerialPortWriteRead::SerialPortWriteRead() : m_serial_port(new SerialPort),
+    m_encrypt(new Encrypt)
 {
 
 }
@@ -157,6 +158,10 @@ int SerialPortWriteRead::ExitAppConfig()
 
 int SerialPortWriteRead::SetIspdTagId(QString record_id)
 {
+    if(record_id.isEmpty())
+    {
+        return -1;
+    }
     SerialPort::Data data;
     std::string current_sign_id = record_id.toStdString();
     qint32 ispd_id_dencrypt = this->m_encrypt->dencrypt_ispd_id(current_sign_id);
@@ -315,15 +320,15 @@ int SerialPortWriteRead::GetHzVersionTagId()
     protoserialport::ResPkg<protoserialport::ResAll> resall(all_msg, strlen(all_msg));
     qint32 ispd_encryt_id = resall.getData().getID();
     QString ispd_encryt_strid = m_encrypt->encrypt_ispd_id(ispd_encryt_id);
-    this->m_check_data.tag_id = ispd_encryt_strid;
+    this->m_id_ver_hz.tag_id = ispd_encryt_strid;
 
     QString hz12 = QString::number(resall.getData().getHZ());
-    this->m_check_data.hz = hz12;
+    this->m_id_ver_hz.hz = hz12;
 
     QString ispd_version =  QString::fromLocal8Bit("固件") +  QString("%1").arg(resall.getData().get_ispd_version(),3,10,QChar('0'));
     QString uwb_version =  QString::fromLocal8Bit("透传") + QString("%1").arg(resall.getData().get_uwb_version(),3,10,QChar('0'));
     QString sp_version =  QString::fromLocal8Bit("协议") + QString("%1").arg(resall.getData().get_sp_version(),3,10,QChar('0'));
-    this->m_check_data.version = ispd_version + uwb_version + sp_version;
+    this->m_id_ver_hz.version = ispd_version + uwb_version + sp_version;
 
     return 0;
 }
@@ -388,11 +393,11 @@ int SerialPortWriteRead::GetHeartRate()
     quint8 hrthree = reshrthree.getData().get_hr();
     QString hr3 = QString::number(hrthree);
 
-    this->m_check_data.hrResult.hr_first = hr1;
-    this->m_check_data.hrResult.sec_hr = hr2;
-    this->m_check_data.hrResult.third_hr = hr3;
+    this->m_heart_rate.hr_first = hr1;
+    this->m_heart_rate.sec_hr = hr2;
+    this->m_heart_rate.third_hr = hr3;
     quint8 hr_avg = (hr1.toInt() + hr2.toInt() + hr3.toInt()) / 3;
-    this->m_check_data.hrResult.avg_hr = QString::number(hr_avg);
+    this->m_heart_rate.avg_hr = QString::number(hr_avg);
     return 0;
 }
 
@@ -435,25 +440,25 @@ int SerialPortWriteRead::GetSensor()
     qint16 gy_z = sensor.getData().get_gy_z();
 
     quint16 hb = sensor.getData().get_hb();
-    this->m_check_data.spResult.sp_hr = QString::number(hb);
+    this->m_sport_data.sp_hr = QString::number(hb);
 
     quint8 pw = sensor.getData().get_pw() & 0x7F;
-    this->m_check_data.spResult.sp_bat = QString::number(pw);
+    this->m_sport_data.sp_bat = QString::number(pw);
 
     quint8 is_charge = sensor.getData().get_pw() & 0x80;
 
     QString is_charge_str = is_charge == 1 ?  QString::fromLocal8Bit("正在充电") :  QString::fromLocal8Bit("未充电");
-    this->m_check_data.spResult.sp_charge = is_charge_str;
+    this->m_sport_data.sp_charge = is_charge_str;
 
     QString ac_pt = "(" + QString::number(ac_x) + ","
             + QString::number(ac_y) + ","
             + QString::number(ac_z) + ")";
-    this->m_check_data.spResult.sp_a_speed = ac_pt;
+    this->m_sport_data.sp_a_speed = ac_pt;
 
     QString gy_pt = "(" + QString::number(gy_x) + ","
             + QString::number(gy_y) + ","
             + QString::number(gy_z) + ")";
-    this->m_check_data.spResult.sp_gyroscope = gy_pt;
+    this->m_sport_data.sp_gyroscope = gy_pt;
     return 0;
 }
 

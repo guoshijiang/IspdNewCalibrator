@@ -5,8 +5,8 @@ ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ControlServerStutasInfo), m_udp_con_svr_info(new HttpClient::UdpControlServerInfoHttpReq)
 {
-    QScrollArea *p_area = new QScrollArea();
-    QWidget *p_widget = new QWidget();
+    p_area = new QScrollArea();
+    p_widget = new QWidget();
     p_widget->setStyleSheet("QWidget" "{background:white;}");
     m_vbox_layout = new QVBoxLayout();
     m_vbox_layout->addSpacerItem(new QSpacerItem(100, 30, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -20,13 +20,65 @@ ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
 
 ControlServerStutasInfo::~ControlServerStutasInfo()
 {
+    if(m_label != NULL)
+    {
+        delete m_label;
+        m_label = NULL;
+    }
+
+    if(m_ledit != NULL)
+    {
+        delete m_ledit;
+        m_ledit = NULL;
+    }
+
+    if(m_layout != NULL)
+    {
+        delete m_layout;
+        m_layout = NULL;
+    }
+
+    if(m_vbox_layout != NULL)
+    {
+        delete m_vbox_layout;
+        m_vbox_layout =NULL;
+    }
+
+    if(m_main_layout != NULL)
+    {
+        delete m_main_layout;
+        m_main_layout = NULL;
+    }
+
+    if(m_page != NULL)
+    {
+        delete m_page;
+        m_page = NULL;
+    }
+
+    if(p_widget != NULL)
+    {
+        delete p_widget;
+        p_widget = NULL;
+    }
+
+    if(p_area != NULL)
+    {
+        delete p_area;
+        p_area = NULL;
+    }
 
     if(this->m_udp_con_svr_info != NULL)
     {
         delete this->m_udp_con_svr_info;
         this->m_udp_con_svr_info = NULL;
-    }
+    }    
     delete ui;
+}
+
+void ControlServerStutasInfo::CloseApp()
+{
+    this->close();
 }
 
 void ControlServerStutasInfo::CSSInfoStart()
@@ -34,27 +86,59 @@ void ControlServerStutasInfo::CSSInfoStart()
     this->setWindowIcon(QIcon(":/UDP.png"));
     this->setWindowTitle(QString::fromLocal8Bit("获取UDP控制服务状态信息"));
     this->showNormal();
+    this->getUdpControl();
 }
 
-void ControlServerStutasInfo::on_lineEdit_pro_textChanged(const QString &arg1)
+void ControlServerStutasInfo::getUdpControl()
 {
-    this->ui->textEdit_log->append(QString::fromLocal8Bit("您输入了") + arg1);
-}
-
-void ControlServerStutasInfo::on_pushButton_clicked()
-{
-    this->m_req_pro = this->ui->lineEdit_pro->text();
     this->m_udp_con_svr_info->GetReqProNumber(m_req_pro);
     this->m_udp_con_svr_info->UdpControlServerInfo([&](bool success, QMap<QString, QVariant> udp_svr_data)
     {
        if(success)
        {
            this->ui->groupBox_mmr->setLayout(m_main_layout);
-           this->ui->lineEdit_pro_2->setText(udp_svr_data["pro"].toString());
-           this->ui->lineEdit_stutas->setText(QString::number(udp_svr_data["ec"].toInt()));
-           this->ui->lineEdit_ip->setText(udp_svr_data["host"].toString());
-           this->ui->lineEdit_sync->setText(QString::number(udp_svr_data["sync"].toInt()));
-           this->ui->lineEdit_reset->setText(QString::number(udp_svr_data["reset"].toInt()));
+           if(udp_svr_data["ec"].toInt() == 0)
+           {
+               this->ui->lineEdit_stutas->setText(UTF8BIT("读取成功"));
+           }
+           else
+           {
+               this->ui->lineEdit_stutas->setText(UTF8BIT("读取失败"));
+           }
+           this->ui->lineEdit_host->setText(udp_svr_data["host"].toString());
+           QJsonValue json_value = udp_svr_data["ipv4"].toJsonValue();
+
+           QJsonArray json_arr= json_value.toArray();
+           for(int i = 0; i < json_arr.size(); i++)
+           {
+               this->ui->textEdit_ip->append(json_arr.at(i).toString());
+           }
+
+           if(udp_svr_data["sync"].toInt() == 0)
+           {
+               this->ui->lineEdit_sync->setText(UTF8BIT("已经关闭自动同步"));
+           }
+           else if(udp_svr_data["sync"].toInt() == 1)
+           {
+               this->ui->lineEdit_sync->setText(UTF8BIT("自动同步已开启"));
+           }
+           else
+           {
+               this->ui->lineEdit_sync->setText(UTF8BIT("未知类型"));
+           }
+           if(udp_svr_data["reset"].toInt() == 0)
+           {
+               this->ui->lineEdit_reset->setText(UTF8BIT("关闭终端自动恢复出厂设置"));
+           }
+           else if(udp_svr_data["reset"].toInt() == 1)
+           {
+               this->ui->lineEdit_reset->setText(UTF8BIT("开启终端自动恢复出厂设置"));
+           }
+           else
+           {
+               this->ui->lineEdit_reset->setText(UTF8BIT("未知类型"));
+           }
+
            QJsonValue json_vale = udp_svr_data["mr"].toJsonValue();
            if(json_vale.isArray())
            {
@@ -65,10 +149,10 @@ void ControlServerStutasInfo::on_pushButton_clicked()
                     if(json_obj.contains("id"))
                     {
                         QJsonValue value = json_obj.value("id");
-                        if(value.isString())
+                        if(value.isDouble())
                         {
-                            QString id_str = value.toString();
-                            this->UdpSvrDataUi("id", id_str);
+                            int id_str = value.toDouble();
+                            this->UdpSvrDataUi(UTF8BIT("终端id"), QString::number(id_str));
                         }
                     }
 
@@ -78,7 +162,41 @@ void ControlServerStutasInfo::on_pushButton_clicked()
                         if(value.isString())
                         {
                             QString ip_str = value.toString();
-                            this->UdpSvrDataUi("ip", ip_str);
+                            this->UdpSvrDataUi(UTF8BIT("终端ip"), ip_str);
+                        }
+                    }
+
+                    if(json_obj.contains("sync"))
+                    {
+                        QJsonValue value = json_obj.value("sync");
+                        if(value.isDouble())
+                        {
+                            int sync_mr = value.toDouble();
+                            if(sync_mr == 0)
+                            {
+                                this->UdpSvrDataUi(UTF8BIT("终端同步信息"), UTF8BIT("已同步"));
+                            }
+                            if(sync_mr == 1)
+                            {
+                                this->UdpSvrDataUi(UTF8BIT("终端同步信息"), UTF8BIT("未同步"));
+                            }
+                        }
+                    }
+                    if(json_obj.contains("reset"))
+                    {
+                        QJsonValue value = json_obj.value("reset");
+                        if(value.isDouble())
+                        {
+                            int reset_mr = value.toDouble();
+                            if(reset_mr == 0)
+                            {
+                                this->UdpSvrDataUi(UTF8BIT("终端恢复出厂设置信息"), UTF8BIT("已恢复"));
+                            }
+
+                            if(reset_mr == 1)
+                            {
+                                this->UdpSvrDataUi(UTF8BIT("终端恢复出厂设置信息"), UTF8BIT("未恢复"));
+                            }
                         }
                     }
                 }

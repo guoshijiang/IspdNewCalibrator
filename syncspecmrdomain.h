@@ -17,6 +17,7 @@ public:
     explicit SyncSpecMrDomain(QWidget *parent = 0);
     ~SyncSpecMrDomain();
     void SyncSpecMrDomainInit();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

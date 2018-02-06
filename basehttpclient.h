@@ -23,19 +23,18 @@ using namespace std;
 
 namespace HttpClient
 {
-    const QString OpenDomainUrl = QString("http://192.168.90.113:8088/api/calibrator/openclosedomain");
-    const QString UdpControlUrl = QString("http://192.168.90.113:8088/api/calibrator/getudpsvrdata");
-    const QString SpecMrFactoryResetUrl = QString("http://192.168.90.113:8088/api/calibrator/openclosedomain");
-    const QString SyncSpecMrDomainUrl = QString("http://192.168.90.113:8088/api/calibrator/syncdomain");
-    const QString FactoryResetUrl = QString("http://192.168.90.113:8088/api/calibrator/resetmrfactory");
-    const QString RestartSpecUrl = QString("http://192.168.90.113:8088/api/calibrator/restartspecmr");
-    const QString ReadSpecMrInfoUrl = QString("http://192.168.90.113:8088/api/calibrator/getspecmrcondata");
-    const QString WriteSpecMrInfoUrl = QString("http://192.168.90.113:8088/api/calibrator/setspecmrcondata");
-    const QString GetMrResultData = QString("http://192.168.90.113:8088/api/calibrator/mrresultdata");
+    const QString OpenDomainUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString UdpControlUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString SpecMrFactoryResetUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString SyncSpecMrDomainUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString FactoryResetUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString RestartSpecUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString ReadSpecMrInfoUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString WriteSpecMrInfoUrl = QString("http://192.168.32.108:38080/udp/control");
+    const QString GetMrResultData = QString("http://192.168.32.108:38080/udp/data");
 
     typedef struct _WriteSpecMr
     {
-        int pro;
         int mmid;
         QString lip;
         QString nip;
@@ -44,8 +43,9 @@ namespace HttpClient
         QString domain;
         int tp;
         int up;
-        int nsm;
-        int ar;
+        QString version;
+        int nm;
+        int ari;
     }write_spec_mr;
 
     class BaseHttpClient : public QObject
@@ -222,7 +222,7 @@ namespace HttpClient
 
     private:
          std::function<void(bool, QMap<QString, QVariant>)> checkCallback;
-         QString m_get_req_pro;
+         QString m_get_mid;
 
     private:
         ReadSpecMrConfigInfoHttpReqest(const ReadSpecMrConfigInfoHttpReqest &);
@@ -261,7 +261,8 @@ namespace HttpClient
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
     public:
-        QString m_get_tag_id;
+        int m_get_tag_id;
+
     private:
          std::function<void(bool, QMap<QString, QVariant>)> checkCallback;
 

@@ -8,6 +8,7 @@ QT       += core gui
 QT       += network
 QT       += sql
 QT       += serialport
+QT       += webkit webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -38,7 +39,8 @@ SOURCES += main.cpp\
     startupmrautodomain.cpp \
     startupmrautofactoryreset.cpp \
     basehttpclient.cpp \
-    serialportwriteread.cpp
+    serialportwriteread.cpp \
+    udpworker.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -64,7 +66,9 @@ HEADERS  += mainwindow.h \
     startupmrautodomain.h \
     startupmrautofactoryreset.h \
     basehttpclient.h \
-    serialportwriteread.h
+    serialportwriteread.h \
+    udpworker.h
+
 
 FORMS    += mainwindow.ui \
     version.ui \

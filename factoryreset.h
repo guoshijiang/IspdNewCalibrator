@@ -17,6 +17,7 @@ public:
     explicit FactoryReset(QWidget *parent = 0);
     ~FactoryReset();
     void FactoryResetInit();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

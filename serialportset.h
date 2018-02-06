@@ -21,6 +21,7 @@ public:
     ~SerialPortSet();
     void serPort_start();
     int init();
+    void CloseApp();
 
 private slots:
     void on_pushButton_sport_set_clicked();

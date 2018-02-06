@@ -18,6 +18,7 @@ public:
     explicit WriteSpecConfig(QWidget *parent = 0);
     ~WriteSpecConfig();
     void WriteSpecConfig_start();
+    void CloseApp();
 
 private slots:
     void on_pushButton_clicked();

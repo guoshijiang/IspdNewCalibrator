@@ -15,6 +15,7 @@ public:
     explicit Document(QWidget *parent = 0);
     ~Document();
     void doc_start();
+    void CloseApp();
 
 private slots:
 

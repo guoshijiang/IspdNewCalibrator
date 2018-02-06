@@ -16,6 +16,7 @@ public:
     ~Version();
     void ver_start();
     void ver_init();
+    void CloseApp();
 
 private:
     Ui::Version *ui;

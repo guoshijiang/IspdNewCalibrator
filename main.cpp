@@ -1,6 +1,5 @@
 ﻿#include "mainwindow.h"
 #include <String>
-
 #include <QApplication>
 #include <iostream>
 #include <QString>
@@ -21,6 +20,8 @@
 #define NAME_LEN 100
 
 QFile* global_log_file = NULL;
+
+const int MAX_BUF_LEN = 255;
 
 static void logMessageHandler(QtMsgType type, const QMessageLogContext &msgContext, const QString & msg)
 {
@@ -71,8 +72,9 @@ int main(int argc, char *argv[])
     }
     //qInstallMessageHandler(logMessageHandler);
 
-    MainWindow w;
-    w.start();
+    MainWindow win;
+    win.start();
 
     return a.exec();
 }
+

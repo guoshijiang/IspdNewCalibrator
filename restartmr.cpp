@@ -18,6 +18,11 @@ RestartMr::~RestartMr()
     }
 }
 
+void RestartMr::CloseApp()
+{
+    this->close();
+}
+
 void RestartMr::RestartMrInit()
 {
     this->setWindowIcon(QIcon(":/startup.png"));

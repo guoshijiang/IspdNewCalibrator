@@ -18,6 +18,11 @@ FactoryReset::~FactoryReset()
     }
 }
 
+void FactoryReset::CloseApp()
+{
+    this->close();
+}
+
 void FactoryReset::FactoryResetInit()
 {
     this->setWindowIcon(QIcon(":/resetup.png"));

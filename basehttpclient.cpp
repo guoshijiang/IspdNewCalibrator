@@ -40,6 +40,7 @@ namespace HttpClient
         reply->deleteLater();
     }
 
+    //获取服务端控制信息
     UdpControlServerInfoHttpReq::UdpControlServerInfoHttpReq()
     {
 
@@ -52,10 +53,11 @@ namespace HttpClient
 
     void UdpControlServerInfoHttpReq::UdpControlServerInfo(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString url = UdpControlUrl +"?pro=" + pro;
+        QString url = UdpControlUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1005);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void UdpControlServerInfoHttpReq::GetReqProNumber(QString req_pro)
@@ -65,12 +67,8 @@ namespace HttpClient
 
     void UdpControlServerInfoHttpReq::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        QString pro;
-        int ec;
-        QString host;
-        int sync;
-        int reset;
-        QString mr;
+        QString pro, host, mr;
+        int ec, sync, reset;
         if(statusCode == 200)
         {
             QJsonParseError jsonError;
@@ -110,6 +108,12 @@ namespace HttpClient
                              host = value.toString();
                              udp_svr_data.insert("host", host);
                          }
+                    }
+
+                    if(json_obj.contains("ipv4"))
+                    {
+                        QJsonValue value = json_obj.value("ipv4");
+                        udp_svr_data.insert("ipv4", value);
                     }
 
                     if(json_obj.contains("sync"))
@@ -476,6 +480,7 @@ namespace HttpClient
         this->checkCallback(false, restart_specmr);
     }
 
+    //读指定终端配置信息
     ReadSpecMrConfigInfoHttpReqest::ReadSpecMrConfigInfoHttpReqest()
     {
 
@@ -486,43 +491,43 @@ namespace HttpClient
 
     }
 
-    void ReadSpecMrConfigInfoHttpReqest::GetReqestDataFromUI(QString req_pro)
+    void ReadSpecMrConfigInfoHttpReqest::GetReqestDataFromUI(QString mid)
     {
-        this->m_get_req_pro = req_pro;
+        this->m_get_mid = mid;
     }
 
     void ReadSpecMrConfigInfoHttpReqest::ReadSpecMrConfigInfo(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString url = ReadSpecMrInfoUrl + "?pro=" + pro;
+        QString url = ReadSpecMrInfoUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1011);
+        obj.insert("mid", this->m_get_mid.toInt());
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void ReadSpecMrConfigInfoHttpReqest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        int pro, mid, ec, rev, tp, up, nsm, ar, dipvalue;
-        QString lip, nip, gip, dip, lip2, nip2, gip2, dip2, domain, udata;
+        int ver, mid, ec, tp, up, nm, ari, dv;
+        QString lip, nip, gip, dip, lip2, nip2, gip2, dip2, domain, mac, ud;
         if(statusCode == 200)
         {
             QJsonParseError jsonError;
             QJsonDocument json_doc = QJsonDocument::fromJson(data, &jsonError);
+            qDebug() << "data = " << data;
             if(jsonError.error == QJsonParseError::NoError)
             {
                 QMap<QString, QVariant> read_spec_mr_info;
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-
-                    qDebug() << "json_obj = " << json_obj;
-
-                    if(json_obj.contains("pro"))
+                    if(json_obj.contains("ec"))
                     {
-                        QJsonValue value = json_obj.value("pro");
+                        QJsonValue value = json_obj.value("ec");
                         if (value.isDouble())
                         {
-                            pro = value.toDouble();
-                            read_spec_mr_info.insert("pro", pro);
+                            ec = value.toDouble();
+                            read_spec_mr_info.insert("ec", ec);
                         }
                     }
 
@@ -536,23 +541,13 @@ namespace HttpClient
                         }
                     }
 
-                    if(json_obj.contains("ec"))
+                    if(json_obj.contains("ver"))
                     {
-                        QJsonValue value = json_obj.value("ec");
+                        QJsonValue value = json_obj.value("ver");
                         if (value.isDouble())
                         {
-                            ec = value.toDouble();
-                            read_spec_mr_info.insert("ec", ec);
-                        }
-                    }
-
-                    if(json_obj.contains("rev"))
-                    {
-                        QJsonValue value = json_obj.value("rev");
-                        if (value.isDouble())
-                        {
-                            rev = value.toDouble();
-                            read_spec_mr_info.insert("rev", rev);
+                            ver = value.toDouble();
+                            read_spec_mr_info.insert("ver", ver);
                         }
                     }
 
@@ -636,6 +631,26 @@ namespace HttpClient
                         }
                     }
 
+                    if(json_obj.contains("domain"))
+                    {
+                        QJsonValue value = json_obj.value("domain");
+                        if (value.isString())
+                        {
+                            domain = value.toString();
+                            read_spec_mr_info.insert("domain", domain);
+                        }
+                    }
+
+                    if(json_obj.contains("mac"))
+                    {
+                        QJsonValue value = json_obj.value("mac");
+                        if (value.isString())
+                        {
+                            mac = value.toString();
+                            read_spec_mr_info.insert("mac", mac);
+                        }
+                    }
+
                     if(json_obj.contains("tp"))
                     {
                         QJsonValue value = json_obj.value("tp");
@@ -656,53 +671,45 @@ namespace HttpClient
                         }
                     }
 
-                    if(json_obj.contains("domain"))
+                    if(json_obj.contains("nm"))
                     {
-                        QJsonValue value = json_obj.value("domain");
-                        if (value.isString())
-                        {
-                            domain = value.toString();
-                            read_spec_mr_info.insert("domain", domain);
-                        }
-                    }
-
-                    if(json_obj.contains("nsm"))
-                    {
-                        QJsonValue value = json_obj.value("nsm");
+                        QJsonValue value = json_obj.value("nm");
                         if (value.isDouble())
                         {
-                            nsm = value.toDouble();
-                            read_spec_mr_info.insert("nsm", nsm);
+                            nm = value.toDouble();
+                            read_spec_mr_info.insert("nm", nm);
                         }
                     }
 
-                    if(json_obj.contains("ar"))
+
+
+                    if(json_obj.contains("ari"))
                     {
-                        QJsonValue value = json_obj.value("ar");
+                        QJsonValue value = json_obj.value("ari");
                         if (value.isDouble())
                         {
-                            ar = value.toDouble();
-                            read_spec_mr_info.insert("ar", ar);
+                            ari = value.toDouble();
+                            read_spec_mr_info.insert("ari", ari);
                         }
                     }
 
-                    if(json_obj.contains("udata"))
+                    if(json_obj.contains("ud"))
                     {
-                        QJsonValue value = json_obj.value("udata");
-                        if (value.isString())
+                        QJsonValue value = json_obj.value("ud");
+                        if(value.isString())
                         {
-                            udata = value.toString();
-                            read_spec_mr_info.insert("udata", udata);
+                            ud = value.toString();
+                            read_spec_mr_info.insert("ud", ud);
                         }
                     }
 
-                    if(json_obj.contains("dipvalue"))
+                    if(json_obj.contains("dv"))
                     {
-                        QJsonValue value = json_obj.value("dipvalue");
+                        QJsonValue value = json_obj.value("dv");
                         if (value.isDouble())
                         {
-                            dipvalue = value.toDouble();
-                            read_spec_mr_info.insert("dipvalue", dipvalue);
+                            dv = value.toDouble();
+                            read_spec_mr_info.insert("dv", dv);
                         }
                     }
 
@@ -727,20 +734,24 @@ namespace HttpClient
 
     void WriteSpecMrConfigInfoHttpRequest::WriteSpecMrConfigInfo(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QByteArray post_arr;
-        post_arr.append("pro=" + m_wsmr.pro);
-        post_arr.append("&mmid=" + m_wsmr.mmid);
-        post_arr.append("&lip=" + m_wsmr.lip);
-        post_arr.append("&nip=" + m_wsmr.nip);
-        post_arr.append("&gip=" + m_wsmr.gip);
-        post_arr.append("&dip=" + m_wsmr.dip);
-        post_arr.append("&tp=" + m_wsmr.tp);
-        post_arr.append("&up=" + m_wsmr.up);
-        post_arr.append("&nsm=" + m_wsmr.nsm);
-        post_arr.append("&ar=" + m_wsmr.ar);
-        QString url = WriteSpecMrInfoUrl + "?";
+
+
+        QString url = WriteSpecMrInfoUrl;
         this->checkCallback = callback;
-        this->post(url, post_arr);
+        QJsonObject obj;
+        obj.insert("pro", 1012);
+        obj.insert("mid", m_wsmr.mmid);
+        obj.insert("lip", m_wsmr.lip);
+        obj.insert("nip", m_wsmr.nip);
+        obj.insert("gip", m_wsmr.gip);
+        obj.insert("dip", m_wsmr.dip);
+        obj.insert("domain", m_wsmr.domain);
+        obj.insert("tp", m_wsmr.tp);
+        obj.insert("up", m_wsmr.up);
+        obj.insert("ver", m_wsmr.version);
+        obj.insert("nm", m_wsmr.nm);
+        obj.insert("ari", m_wsmr.ari);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void WriteSpecMrConfigInfoHttpRequest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
@@ -756,15 +767,6 @@ namespace HttpClient
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
-                    {
-                        QJsonValue value = json_obj.value("pro");
-                        if (value.isDouble())
-                        {
-                            pro = value.toDouble();
-                            write_specmr.insert("pro", pro);
-                        }
-                    }
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
@@ -794,84 +796,101 @@ namespace HttpClient
 
     void GetMrReslutHttpReqest::GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString tag_id = this->m_get_tag_id;
-        QString url = GetMrResultData + "?pro=1009&tag_id=" + tag_id;;
+        QString url = GetMrResultData;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 2005);
+        obj.insert("id", 10010018);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void GetMrReslutHttpReqest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        int pro;
-        QString tag_id, a_spped, gyroscope, hr, bat;
+        int ec, tag_id, hr, power, charge;
+        QJsonArray ac, gy;
+        if(reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error:" << reply->errorString();
+            return;
+        }
+
         if(statusCode == 200)
         {
-            qDebug() << "data = " << data;
+            qDebug() << "data=" << data;
             QJsonParseError jsonError;
             QJsonDocument json_doc = QJsonDocument::fromJson(data, &jsonError);
-
             if(jsonError.error == QJsonParseError::NoError)
             {
                 QMap<QString, QVariant> mr_result;
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
+                    if(json_obj.contains("ec"))
                     {
-                        QJsonValue value = json_obj.value("pro");
+                        QJsonValue value = json_obj.value("ec");
                         if (value.isDouble())
                         {
-                            pro = value.toDouble();
-                            mr_result.insert("pro", pro);
+                            ec = value.toDouble();
+                            mr_result.insert("ec", ec);
                         }
                     }
-                    if(json_obj.contains("tag_id"))
+                    if(json_obj.contains("id"))
                     {
-                        QJsonValue value = json_obj.value("tag_id");
-                        if (value.isString())
+                        QJsonValue value = json_obj.value("id");
+                        if (value.isDouble())
                         {
-                            tag_id = value.toString();
-                            mr_result.insert("tag_id", tag_id);
-                        }
-                    }
-
-                    if(json_obj.contains("a_speed"))
-                    {
-                        QJsonValue value = json_obj.value("a_speed");
-                        if (value.isString())
-                        {
-                            a_spped = value.toString();
-                            mr_result.insert("a_speed", a_spped);
-                        }
-                    }
-
-                    if(json_obj.contains("gyroscope"))
-                    {
-                        QJsonValue value = json_obj.value("gyroscope");
-                        if (value.isString())
-                        {
-                            gyroscope = value.toString();
-                            mr_result.insert("gyroscope", gyroscope);
+                            tag_id = value.toDouble();
+                            mr_result.insert("id", tag_id);
                         }
                     }
 
                     if(json_obj.contains("hr"))
                     {
                         QJsonValue value = json_obj.value("hr");
-                        if (value.isString())
+                        if (value.isDouble())
                         {
-                            hr = value.toString();
+                            hr = value.toDouble();
                             mr_result.insert("hr", hr);
                         }
                     }
 
-                    if(json_obj.contains("bat"))
+                    if(json_obj.contains("power"))
                     {
-                        QJsonValue value = json_obj.value("bat");
-                        if (value.isString())
+                        QJsonValue value = json_obj.value("power");
+                        if (value.isDouble())
                         {
-                            bat = value.toString();
-                            mr_result.insert("bat", bat);
+                            power = value.toDouble();
+                            mr_result.insert("power", power);
+                        }
+                    }
+
+                    if(json_obj.contains("charge"))
+                    {
+                        QJsonValue value = json_obj.value("charge");
+                        if (value.isDouble())
+                        {
+                            charge = value.toDouble();
+                            mr_result.insert("charge", charge);
+                        }
+                    }
+
+                    if(json_obj.contains("ac"))
+                    {
+                        QJsonValue value = json_obj.value("ac");
+                        if (value.isArray())
+                        {
+                            ac = value.toArray();
+                            mr_result.insert("ac", ac);
+                        }
+                    }
+
+                    if(json_obj.contains("gy"))
+                    {
+                        QJsonValue value = json_obj.value("gy");
+                        if (value.isArray())
+                        {
+                            gy = value.toArray();
+                            mr_result.insert("gy", gy);
                         }
                     }
                 }
