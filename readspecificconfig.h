@@ -25,6 +25,7 @@ private slots:
 
 public:
     QString m_mid;
+    QList<int> m_list_mid;
 
 private:
     Ui::ReadSpecificConfig *ui;

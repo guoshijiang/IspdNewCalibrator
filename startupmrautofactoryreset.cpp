@@ -26,31 +26,64 @@ void StartUpMrAutoFactoryReset::CloseApp()
 void StartUpMrAutoFactoryReset::StartUpMrAutoFactoryReset_start()
 {
     this->setWindowIcon(QIcon(":/openreset.png"));
-    this->setWindowTitle(QString::fromLocal8Bit("开启接入终端自动恢复出厂设置功能"));
+    this->setWindowTitle(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态"));
     this->showNormal();
+
+    if(this->m_reset == 1)
+    {
+        isOpen = true;
+        this->ui->pushButton->setText(UTF8BIT("关闭"));
+    }
+
+    if(this->m_reset == 0)
+    {
+        isOpen = false;
+        this->ui->pushButton->setText(UTF8BIT("开启"));
+    }
 }
 
 void StartUpMrAutoFactoryReset::on_pushButton_clicked()
 {
-    this->m_req_pro = this->ui->lineEdit_req_pro->text();
-    this->m_oc_mr_auto_freset->GetReqProNumber(m_req_pro);
-    this->m_oc_mr_auto_freset->OpenCloseMrAutoFactoryReset([&](bool success, QMap<QString, int>ocmfr_freset)
+    if(isOpen)
     {
-       if(success)
-       {
-           int req_pro = ocmfr_freset["pro"];
-           int req_ec = ocmfr_freset["ec"];
-           this->ui->lineEdit_rep_pro->setText(QString::number(req_pro));
-           this->ui->lineEdit_rep_status->setText(QString::number(req_ec));
-           if(ocmfr_freset["ec"] == 0)
+        this->m_oc_mr_auto_freset->GetReqProNumber(0);
+        this->m_oc_mr_auto_freset->OpenCloseMrAutoFactoryReset([&](bool success, QMap<QString, int>ocmfr_freset)
+        {
+           if(success)
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("开启接入终端自动同步Domain功能成功，终端编号为:") + QString::number(req_pro));
+               if(ocmfr_freset["ec"] == 0)
+               {
+                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功"));
+               }
+               else
+               {
+                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态"));
+               }
            }
-           else
+        });
+        isOpen = false;
+        this->ui->pushButton->setText(UTF8BIT("开启"));
+    }
+    else
+    {
+        this->m_oc_mr_auto_freset->GetReqProNumber(1);
+        this->m_oc_mr_auto_freset->OpenCloseMrAutoFactoryReset([&](bool success, QMap<QString, int>ocmfr_freset)
+        {
+           if(success)
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("开启接入终端自动同步Domain功能失败, 终端编号为:") + QString::number(req_pro));
+               if(ocmfr_freset["ec"] == 0)
+               {
+                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功"));
+               }
+               else
+               {
+                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态"));
+               }
            }
-       }
-    });
+        });
+        isOpen = true;
+        this->ui->pushButton->setText(UTF8BIT("关闭"));
+    }
+
 }
 

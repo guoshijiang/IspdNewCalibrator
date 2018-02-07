@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDialog>
 #include "basehttpclient.h"
+#include "common.h"
 #include <QDebug>
 
 namespace Ui {
@@ -22,7 +23,6 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-    void on_lineEdit_req_pro_textChanged(const QString &arg1);
 
 public slots:
      void onProNum(QString pro_num);
@@ -32,6 +32,8 @@ public slots:
 
 public:
     QString m_req_pro;
+    int m_sync;
+    bool isOpen;
 
 private:
     Ui::StartUpMrAutoDomain *ui;

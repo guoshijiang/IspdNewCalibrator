@@ -17,36 +17,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>开启的终端</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_req_pro"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="pushButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -62,35 +32,8 @@
         </font>
        </property>
        <property name="text">
-        <string>开启</string>
+        <string/>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>开启的状态</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QTextEdit" name="textEdit_log">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
     </layout>
@@ -105,37 +48,9 @@
       </font>
      </property>
      <property name="title">
-      <string>开启结果</string>
+      <string>结果</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>pro</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_rep_pro"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>ec</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_rep_wc"/>
-        </item>
-       </layout>
-      </item>
       <item>
        <widget class="QTextEdit" name="textEdit_status">
         <property name="font">

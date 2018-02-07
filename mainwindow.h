@@ -32,6 +32,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QPalette>
+#include <QThread>
 
 #include "version.h"
 #include "question.h"
@@ -49,6 +50,7 @@
 #include "syncspecmrdomain.h"
 #include "basehttpclient.h"
 #include "serialportwriteread.h"
+#include "broadcastworker.h"
 
 namespace Ui
 {
@@ -87,11 +89,10 @@ public:
         return UTF8BIT("比对失败");
     }
 
-    //void addAutoRecordUi(QString com_name);
-    //void CheckTest(QString com_name);
     void UIinit();
     void CompareData();
     void fontSet();
+    void getServerConfigInfo();
 
 public slots:
     void VersionSlot();
@@ -107,13 +108,13 @@ public slots:
     void SyncSpecMrDomainSlot();
     void FactoryResetSlot();
     void RestartMrSlot();
-    //void m_record_ledit_textChanged(QString text);
 
     void onRecordSuccLogMsg(const QString & msg);
     void onRecordFailMsg(const QString & msg);
 
 public:
     Ui::MainWindow *ui;
+
     Version *m_version;
     Question *m_question;
     Document *m_doc;
@@ -127,7 +128,9 @@ public:
     SyncSpecMrDomain *m_sync_spec_mr_domain;
     RestartMr *m_restart_spec_mr;
     FactoryReset *m_factory_reset;
+
     HttpClient::GetMrReslutHttpReqest* m_mr_result;
+    HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
     SerialPortWriteRead* m_sport_wr;
     SerialPort *m_serial_port;
 
@@ -142,10 +145,22 @@ public:
     QLabel *m_record_label;
     QPushButton *m_but;
     QList<QLineEdit*> m_auto_record_list;
-
     QStringList m_com_list;
+    QElapsedTimer m_tim;
 
-     QElapsedTimer m_tim;
+    BroadCastWorker* m_bc_work;
+    QThread *m_thread;
+
+
+    /***************************/
+    /*和设置初始化相关的变量       */
+    /***************************/
+    int m_con_sync;
+    int m_con_reset;
+    QList<int> m_con_mid;
+
+signals:
+    void startWork();
 
 private slots:
     void on_pushButton_test_clicked();

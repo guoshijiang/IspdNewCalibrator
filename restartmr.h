@@ -23,8 +23,8 @@ private slots:
     void on_pushButton_clicked();
 
 public:
-    QString m_req_pro;
     QString m_req_id;
+    QList<int> m_mid;
 
 private:
     Ui::RestartMr *ui;

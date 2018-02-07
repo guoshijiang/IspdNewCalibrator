@@ -28,11 +28,15 @@ void ReadSpecificConfig::ReadSpecConfig_start()
     this->setWindowIcon(QIcon(":/read_mr.png"));
     this->setWindowTitle(QString::fromLocal8Bit("读指定终端配置信息"));
     this->showNormal();
+    for(int i = 0; i < m_list_mid.size(); i++)
+    {
+        this->ui->comboBox_id->addItem(QString::number(this->m_list_mid.at(i)));
+    }
 }
 
 void ReadSpecificConfig::on_pushButton_clicked()
 {
-    this->m_mid = this->ui->lineEdit_mid->text();
+    this->m_mid = this->ui->comboBox_id->currentText();
     this->m_read_spec_mrinfo->GetReqestDataFromUI(m_mid);
     this->m_read_spec_mrinfo->ReadSpecMrConfigInfo([&](bool success, QMap<QString, QVariant>read_sepc_mr)
     {

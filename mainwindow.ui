@@ -751,7 +751,6 @@
     <addaction name="separator"/>
     <addaction name="action_open_close_reset"/>
     <addaction name="separator"/>
-    <addaction name="action_specmr_domain"/>
     <addaction name="action_reset_cch"/>
     <addaction name="separator"/>
     <addaction name="action_reset_specmr"/>
@@ -942,7 +941,10 @@
      <normaloff>:/opendomain.png</normaloff>:/opendomain.png</iconset>
    </property>
    <property name="text">
-    <string>开启或关闭接入终端自动同步Domain功能</string>
+    <string>设置控制服务终端自动同步状态
+
+
+</string>
    </property>
   </action>
   <action name="action_close_domain">
@@ -960,7 +962,10 @@
      <normaloff>:/openreset.png</normaloff>:/openreset.png</iconset>
    </property>
    <property name="text">
-    <string>开启或关闭接入终端自动恢复出厂设置功能</string>
+    <string>设置控制服务终端自动恢复出厂设置状态
+
+
+</string>
    </property>
   </action>
   <action name="action_close_reset">
@@ -978,7 +983,7 @@
      <normaloff>:/synchronization.png</normaloff>:/synchronization.png</iconset>
    </property>
    <property name="text">
-    <string>同步指定终端的Domain</string>
+    <string>更新指定终端目的服务域名</string>
    </property>
   </action>
   <action name="action_reset_cch">
@@ -987,7 +992,9 @@
      <normaloff>:/resetup.png</normaloff>:/resetup.png</iconset>
    </property>
    <property name="text">
-    <string>恢复指定终端出厂设置</string>
+    <string>设置指定终端恢复出厂设置
+
+</string>
    </property>
   </action>
   <action name="action_reset_specmr">

@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "basehttpclient.h"
+#include "startupmrautodomain.h"
 
 namespace Ui {
 class ControlServerStutasInfo;
@@ -48,19 +49,22 @@ private:
     Ui::ControlServerStutasInfo* ui;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
 public:
+    /***************************/
+    /*界面相关的变量              */
+    /***************************/
     QScrollArea *p_area;
     QWidget *p_widget;
-
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
-
     QWidget *m_page;
     QGridLayout *m_layout;
     QLineEdit *m_ledit;
     QLabel *m_label;
 
+    /***************************/
+    /*HTTP请求相关的变量          */
+    /***************************/
     QString m_req_pro;
-
 private:
     ControlServerStutasInfo(const ControlServerStutasInfo &);
     const ControlServerStutasInfo & operator = (const ControlServerStutasInfo &);

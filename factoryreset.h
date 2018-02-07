@@ -23,7 +23,7 @@ private slots:
     void on_pushButton_clicked();
 
 public:
-    QString m_req_pro;
+    QList<int> m_mid;
     QString m_req_id;
 
 private:

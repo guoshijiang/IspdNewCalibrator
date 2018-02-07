@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     startupmrautofactoryreset.cpp \
     basehttpclient.cpp \
     serialportwriteread.cpp \
-    udpworker.cpp
+    udpworker.cpp \
+    broadcastworker.cpp
 
 HEADERS  += mainwindow.h \
     toolbar.h \
@@ -67,7 +68,8 @@ HEADERS  += mainwindow.h \
     startupmrautofactoryreset.h \
     basehttpclient.h \
     serialportwriteread.h \
-    udpworker.h
+    udpworker.h \
+    broadcastworker.h
 
 
 FORMS    += mainwindow.ui \

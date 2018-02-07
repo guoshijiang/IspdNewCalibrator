@@ -3,7 +3,8 @@
 
 ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ControlServerStutasInfo), m_udp_con_svr_info(new HttpClient::UdpControlServerInfoHttpReq)
+    ui(new Ui::ControlServerStutasInfo),
+    m_udp_con_svr_info(new HttpClient::UdpControlServerInfoHttpReq)
 {
     p_area = new QScrollArea();
     p_widget = new QWidget();
@@ -16,6 +17,7 @@ ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
     m_main_layout = new QVBoxLayout();
     m_main_layout->addWidget(p_area);
     ui->setupUi(this);
+    this->getUdpControl();
 }
 
 ControlServerStutasInfo::~ControlServerStutasInfo()
@@ -86,7 +88,6 @@ void ControlServerStutasInfo::CSSInfoStart()
     this->setWindowIcon(QIcon(":/UDP.png"));
     this->setWindowTitle(QString::fromLocal8Bit("获取UDP控制服务状态信息"));
     this->showNormal();
-    this->getUdpControl();
 }
 
 void ControlServerStutasInfo::getUdpControl()
@@ -105,6 +106,7 @@ void ControlServerStutasInfo::getUdpControl()
            {
                this->ui->lineEdit_stutas->setText(UTF8BIT("读取失败"));
            }
+
            this->ui->lineEdit_host->setText(udp_svr_data["host"].toString());
            QJsonValue json_value = udp_svr_data["ipv4"].toJsonValue();
 
@@ -126,6 +128,7 @@ void ControlServerStutasInfo::getUdpControl()
            {
                this->ui->lineEdit_sync->setText(UTF8BIT("未知类型"));
            }
+
            if(udp_svr_data["reset"].toInt() == 0)
            {
                this->ui->lineEdit_reset->setText(UTF8BIT("关闭终端自动恢复出厂设置"));
@@ -138,6 +141,7 @@ void ControlServerStutasInfo::getUdpControl()
            {
                this->ui->lineEdit_reset->setText(UTF8BIT("未知类型"));
            }
+
 
            QJsonValue json_vale = udp_svr_data["mr"].toJsonValue();
            if(json_vale.isArray())
@@ -165,6 +169,7 @@ void ControlServerStutasInfo::getUdpControl()
                             this->UdpSvrDataUi(UTF8BIT("终端ip"), ip_str);
                         }
                     }
+
 
                     if(json_obj.contains("sync"))
                     {

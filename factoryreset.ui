@@ -30,20 +30,6 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_req_pro"/>
-          </item>
-         </layout>
-        </item>
-        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QLabel" name="label_2">
@@ -53,7 +39,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_req_mid"/>
+           <widget class="QComboBox" name="comboBox_id"/>
           </item>
          </layout>
         </item>
@@ -80,81 +66,10 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>终端出厂设置请求流程</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QTextEdit" name="textEdit_log">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>终端出厂设置响应</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_pro"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>状态码</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_status"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="font">

@@ -26,23 +26,9 @@
         </font>
        </property>
        <property name="title">
-        <string>同步指定终端的Domain请求</string>
+        <string>更新指定终端目的服务域名   </string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_req_pro"/>
-          </item>
-         </layout>
-        </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
@@ -62,7 +48,7 @@
           <item>
            <widget class="QLabel" name="label_req_host">
             <property name="text">
-             <string>终端host</string>
+             <string>domain</string>
             </property>
            </widget>
           </item>
@@ -90,85 +76,14 @@
         </font>
        </property>
        <property name="text">
-        <string>同步</string>
+        <string>更新同步</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>同步指定终端的Domain请求流程记录</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QTextEdit" name="textEdit_log">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
     </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="font">
-        <font>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="title">
-        <string>同步指定终端的Domain响应</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>pro</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_pro"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>状态码</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_rep_status"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="font">
@@ -179,7 +94,7 @@
         </font>
        </property>
        <property name="title">
-        <string>同步指定终端的Domain结果</string>
+        <string>更新指定终端目的服务域名结果</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>

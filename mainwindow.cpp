@@ -25,15 +25,27 @@ MainWindow::MainWindow(QWidget *parent) :
     m_start_mr_auto_domain(new StartUpMrAutoDomain), m_start_mr_auto_freset(new StartUpMrAutoFactoryReset),
     m_sync_spec_mr_domain(new SyncSpecMrDomain), m_restart_spec_mr(new RestartMr),
     m_factory_reset(new FactoryReset), m_mr_result(new HttpClient::GetMrReslutHttpReqest),
-    m_sport_wr(new SerialPortWriteRead)
+    m_sport_wr(new SerialPortWriteRead), m_udp_con_svr_info(new HttpClient::UdpControlServerInfoHttpReq)
 {
     ui->setupUi(this);
+
+    //广播业务类
+    m_bc_work = new BroadCastWorker();
+
+    //广播线程
+    m_thread = new QThread();
+    m_bc_work->moveToThread(m_thread);
+    connect(this, &MainWindow::startWork, m_bc_work, &BroadCastWorker::UdpBoardCast);
 
     this->ui->groupBox_record->setStyleSheet("QGroupBox {background:#e7a16b}");
     this->ui->comboBox_com->setStyleSheet("QComboBox {background:#e7a16b}");
     this->ui->lineEdit_id->setStyleSheet("QLineEdit {background:#e7a16b}");
     this->ui->record_status->setStyleSheet("QLabel {background:#e7a16b}");
-    fontSet();
+
+    fontSet();  //界面字体初始化
+
+    this->getServerConfigInfo();
+
     this->m_com_list.clear();
     for (int i=0; i < m_serial_port->m_set_len; i++)
     {
@@ -161,6 +173,16 @@ MainWindow::~MainWindow()
         delete this->m_sport_wr;
         this->m_sport_wr = NULL;
     }
+
+    if(this->m_udp_con_svr_info != NULL)
+    {
+        delete this->m_udp_con_svr_info;
+        this->m_udp_con_svr_info = NULL;
+    }
+
+    this->m_bc_work->setStop(true);
+    this->m_thread->quit();
+    this->m_thread->wait();
 }
 
 void MainWindow::VersionSlot()
@@ -252,8 +274,56 @@ void MainWindow::onRecordFailMsg(const QString & msg)
     qDebug() << fail_log_msg;
 }
 
+void MainWindow::getServerConfigInfo()
+{
+    this->m_udp_con_svr_info->UdpControlServerInfo([&](bool success, QMap<QString, QVariant> udp_svr_data)
+    {
+       if(success)
+       {
+           if(udp_svr_data["ec"].toInt() == 0)
+           {
+              qDebug() << UTF8BIT("读取成功");
+           }
+           else
+           {
+              qDebug() << UTF8BIT("读取失败");
+           }
+           this->m_start_mr_auto_domain->m_sync = udp_svr_data["sync"].toInt();
+           this->m_start_mr_auto_freset->m_reset = udp_svr_data["reset"].toInt();
+           QJsonValue json_vale = udp_svr_data["mr"].toJsonValue();
+           if(json_vale.isArray())
+           {
+                QJsonArray json_array = json_vale.toArray();
+                for(int i = 0; i < json_array.size(); i++)
+                {
+                    QJsonObject json_obj = json_array.at(i).toObject();
+                    if(json_obj.contains("id"))
+                    {
+                        QJsonValue value = json_obj.value("id");
+                        if(value.isDouble())
+                        {
+                            int id_str = value.toDouble();
+                            this->m_factory_reset->m_mid.append(id_str);
+                            this->m_restart_spec_mr->m_mid.append(id_str);
+                            this->m_rsc_config->m_list_mid.append(id_str);
+                        }
+                    }
+                }
+           }
+       }
+    });
+}
+
 void MainWindow::start()
 {
+    if(m_thread->isRunning())
+    {
+       //return ;
+    }
+
+    m_thread->start();
+    emit startWork();
+
     this->setWindowTitle(QString::fromLocal8Bit("超版板上位机测试软件"));
     this->showNormal();
     connect(this->ui->action_version, &QAction::triggered, this, &MainWindow::VersionSlot);

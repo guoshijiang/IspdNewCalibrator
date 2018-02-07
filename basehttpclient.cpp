@@ -161,27 +161,27 @@ namespace HttpClient
     {
 
     }
-    void StartUpMrAutoDomainHttpRequest::GetReqProNumber(QString req_pro)
+    void StartUpMrAutoDomainHttpRequest::GetReqProNumber(int req_sync)
     {
-        this->m_get_req_pro = req_pro;
+        this->m_get_req_sync = req_sync;
     }
 
     void StartUpMrAutoDomainHttpRequest::StartUpMrAutoDomain(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        emit SendProNumber(m_get_req_pro);
-        QString pro = this->m_get_req_pro;
-        QString url = OpenDomainUrl +"?pro=" + pro + "&status=0";
+        QString url = OpenDomainUrl;
         this->checkCallback = callback;
-        this->get(url);
-        emit SendRequestFinish(url);
+        QJsonObject obj;
+        obj.insert("pro", 1006);
+        qDebug() << "request::" << this->m_get_req_sync;
+        obj.insert("sync", this->m_get_req_sync);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void StartUpMrAutoDomainHttpRequest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        int pro, ec;
+        int ec;
         if(statusCode == 200)
         {
-            emit RequestSuccess(QString::fromLocal8Bit("请求成功"));
             QJsonParseError jsonError;
             QJsonDocument json_doc = QJsonDocument::fromJson(data, &jsonError);
             if(jsonError.error == QJsonParseError::NoError)
@@ -189,16 +189,7 @@ namespace HttpClient
                 QMap<QString, int> open_domain;
                 if(json_doc.isObject())
                 {
-                    QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
-                    {
-                        QJsonValue value = json_obj.value("pro");
-                        if (value.isDouble())
-                        {
-                            pro = value.toDouble();
-                            open_domain.insert("pro", pro);
-                        }
-                    }
+                    QJsonObject json_obj = json_doc.object();                  
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
@@ -213,11 +204,11 @@ namespace HttpClient
                 return;
             }
         }
-        emit RequestFail(QString::fromLocal8Bit("请求失败"));
         QMap<QString, int>open_domain;
         this->checkCallback(false, open_domain);
     }
 
+    //设置控制服务终端自动恢复出厂设置状态
     OpenCloseMrAutoFactoryResetHttpRequest::OpenCloseMrAutoFactoryResetHttpRequest()
     {
 
@@ -228,22 +219,24 @@ namespace HttpClient
 
     }
 
-    void OpenCloseMrAutoFactoryResetHttpRequest::GetReqProNumber(QString req_pro)
+    void OpenCloseMrAutoFactoryResetHttpRequest::GetReqProNumber(int req_reset)
     {
-        this->m_get_req_pro = req_pro;
+        this->m_get_req_reset = req_reset;
     }
 
     void OpenCloseMrAutoFactoryResetHttpRequest::OpenCloseMrAutoFactoryReset(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString url = SpecMrFactoryResetUrl +"?pro=" + pro + "&status=0";
+        QString url = SpecMrFactoryResetUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1007);
+        obj.insert("reset", this->m_get_req_reset);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void OpenCloseMrAutoFactoryResetHttpRequest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        int pro, ec;
+        int ec;
         if(statusCode == 200)
         {
             QJsonParseError jsonError;
@@ -254,15 +247,6 @@ namespace HttpClient
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
-                    {
-                        QJsonValue value = json_obj.value("pro");
-                        if (value.isDouble())
-                        {
-                            pro = value.toDouble();
-                            ocmfr_freset.insert("pro", pro);
-                        }
-                    }
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
@@ -281,6 +265,7 @@ namespace HttpClient
         this->checkCallback(false, ocmfr_freset);
     }
 
+    //更新指定终端目的服务域名
     SyncSpecMrDomainHttpRequest::SyncSpecMrDomainHttpRequest()
     {
 
@@ -291,22 +276,21 @@ namespace HttpClient
 
     }
 
-    void SyncSpecMrDomainHttpRequest::GetReqestDataFromUI(QString req_pro, QString req_id, QString req_host)
+    void SyncSpecMrDomainHttpRequest::GetReqestDataFromUI(QString req_id, QString req_host)
     {
-        this->m_get_req_pro = req_pro;
         this->m_get_req_id  = req_id;
         this->m_get_req_host = req_host;
     }
 
     void SyncSpecMrDomainHttpRequest::SyncSpecMrDomain(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString id = this->m_get_req_id;
-        QString host = this->m_get_req_host;
-        qDebug() << pro << id << host;
-        QString url = SyncSpecMrDomainUrl + "?pro=" + pro + "&mid=" + id + "&host=" + host;
+        QString url = SyncSpecMrDomainUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1008);
+        obj.insert("mid", this->m_get_req_id.toInt());
+        obj.insert("domain", this->m_get_req_host);
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void SyncSpecMrDomainHttpRequest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
@@ -349,6 +333,7 @@ namespace HttpClient
         this->checkCallback(false, sync_domain);
     }
 
+    //恢复指定终端出厂设置功能
     FactoryResetHttpReqest::FactoryResetHttpReqest()
     {
 
@@ -359,25 +344,24 @@ namespace HttpClient
 
     }
 
-    void FactoryResetHttpReqest::GetReqestDataFromUI(QString req_pro, QString req_id)
+    void FactoryResetHttpReqest::GetReqestDataFromUI(QString req_id)
     {
-        this->m_get_req_pro = req_pro;
         this->m_get_req_id  = req_id;
     }
 
-
     void FactoryResetHttpReqest::FactoryReset(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString id = this->m_get_req_id;
-        QString url = FactoryResetUrl + "?pro=" + pro + "&mid=" + id;
+        QString url = FactoryResetUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1009);
+        obj.insert("mid", this->m_get_req_id.toInt());
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void FactoryResetHttpReqest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
-        int pro, ec;
+        int ec;
         if(statusCode == 200)
         {
             QJsonParseError jsonError;
@@ -388,15 +372,6 @@ namespace HttpClient
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
-                    {
-                        QJsonValue value = json_obj.value("pro");
-                        if (value.isDouble())
-                        {
-                            pro = value.toDouble();
-                            factory_reset.insert("pro", pro);
-                        }
-                    }
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
@@ -415,6 +390,7 @@ namespace HttpClient
         this->checkCallback(false, factory_reset);
     }
 
+    //重启指定终端
     RestartSpecMrHttpReqest::RestartSpecMrHttpReqest()
     {
 
@@ -425,19 +401,19 @@ namespace HttpClient
 
     }
 
-    void RestartSpecMrHttpReqest::GetReqestDataFromUI(QString req_pro, QString req_id)
+    void RestartSpecMrHttpReqest::GetReqestDataFromUI(QString req_id)
     {
-        this->m_get_req_pro = req_pro;
         this->m_get_req_id  = req_id;
     }
 
     void RestartSpecMrHttpReqest::RestartSpecMr(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString pro = this->m_get_req_pro;
-        QString id = this->m_get_req_id;
-        QString url = RestartSpecUrl + "?pro=" + pro + "&mid=" + id;
+        QString url = RestartSpecUrl;
         this->checkCallback = callback;
-        this->get(url);
+        QJsonObject obj;
+        obj.insert("pro", 1010);
+        obj.insert("mid",this->m_get_req_id.toInt());
+        this->post(url, QJsonDocument(obj).toJson());
     }
 
     void RestartSpecMrHttpReqest::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
@@ -453,15 +429,6 @@ namespace HttpClient
                 if(json_doc.isObject())
                 {
                     QJsonObject json_obj = json_doc.object();
-                    if(json_obj.contains("pro"))
-                    {
-                        QJsonValue value = json_obj.value("pro");
-                        if (value.isDouble())
-                        {
-                            pro = value.toDouble();
-                            restart_specmr.insert("pro", pro);
-                        }
-                    }
                     if(json_obj.contains("ec"))
                     {
                         QJsonValue value = json_obj.value("ec");
@@ -734,8 +701,6 @@ namespace HttpClient
 
     void WriteSpecMrConfigInfoHttpRequest::WriteSpecMrConfigInfo(std::function<void(bool, QMap<QString, int>)> callback)
     {
-
-
         QString url = WriteSpecMrInfoUrl;
         this->checkCallback = callback;
         QJsonObject obj;
@@ -800,7 +765,7 @@ namespace HttpClient
         this->checkCallback = callback;
         QJsonObject obj;
         obj.insert("pro", 2005);
-        obj.insert("id", 10010018);
+        obj.insert("id", 10010013);
         this->post(url, QJsonDocument(obj).toJson());
     }
 
