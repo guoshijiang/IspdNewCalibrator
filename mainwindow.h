@@ -33,6 +33,7 @@
 #include <QMessageBox>
 #include <QPalette>
 #include <QThread>
+#include <QRegExp>
 
 #include "version.h"
 #include "question.h"
@@ -108,7 +109,7 @@ public slots:
     void SyncSpecMrDomainSlot();
     void FactoryResetSlot();
     void RestartMrSlot();
-
+    void onSeverBoardCastMsg(const QByteArray &msg, QString serverIP);
     void onRecordSuccLogMsg(const QString & msg);
     void onRecordFailMsg(const QString & msg);
 
@@ -119,10 +120,10 @@ public:
     Question *m_question;
     Document *m_doc;
     SerialPortSet *m_port_set;
+
     ControlServerStutasInfo *m_css_info;
     ReadSpecificConfig *m_rsc_config;
     WriteSpecConfig *m_write_spec_config;
-
     StartUpMrAutoDomain *m_start_mr_auto_domain;
     StartUpMrAutoFactoryReset *m_start_mr_auto_freset;
     SyncSpecMrDomain *m_sync_spec_mr_domain;
@@ -131,14 +132,13 @@ public:
 
     HttpClient::GetMrReslutHttpReqest* m_mr_result;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
+
     SerialPortWriteRead* m_sport_wr;
     SerialPort *m_serial_port;
 
-    //主要控件
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
 
-    //录入标签相关的控件
     QWidget *m_record_page;
     QGridLayout *m_record_layout;
     QLineEdit *m_record_ledit;
@@ -151,13 +151,11 @@ public:
     BroadCastWorker* m_bc_work;
     QThread *m_thread;
 
-
-    /***************************/
-    /*和设置初始化相关的变量       */
-    /***************************/
     int m_con_sync;
     int m_con_reset;
     QList<int> m_con_mid;
+
+    QString M_IP;
 
 signals:
     void startWork();

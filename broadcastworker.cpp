@@ -15,18 +15,7 @@ void BroadCastWorker::UdpBoardCast()
 {
     receiver = new QUdpSocket(this);
     receiver->bind(LOCAL_PORT, QUdpSocket::ShareAddress);
-    connect(receiver, SIGNAL(readyRead()), this, SLOT(processPengingDatagram()));
-    BroadcastGetIpCommand();
-}
-
-void BroadCastWorker::BroadcastGetIpCommand()
-{
-    QByteArray datagram = GET_HOST_COMMAND;
-    int times = TRY_TIMES;
-    while(times--)
-    {
-       receiver->writeDatagram(datagram.data(), datagram.size(), QHostAddress::Broadcast, DEST_PORT);
-    }
+    connect(receiver, SIGNAL(readyRead()), this, SLOT(processPengingDatagram())); 
 }
 
 void BroadCastWorker::processPengingDatagram()
@@ -38,6 +27,7 @@ void BroadCastWorker::processPengingDatagram()
         QByteArray datagram;
         datagram.resize(receiver->pendingDatagramSize());
         receiver->readDatagram(datagram.data(), datagram.size(), &address, &port);
+        emit sendServerBoardCastMsg(datagram.data(), address.toString());
     }
 }
 

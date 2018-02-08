@@ -25,7 +25,8 @@ public:
     void BroadcastGetIpCommand();
 
 signals:
-     void BoardCastDone();
+    void BoardCastDone();
+    void sendServerBoardCastMsg(const QByteArray &json, QString serverIP);
 
 public slots:
 private slots:

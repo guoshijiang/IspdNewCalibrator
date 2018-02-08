@@ -3,7 +3,7 @@
 
 FactoryReset::FactoryReset(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FactoryReset), m_factory_reset(new HttpClient::FactoryResetHttpReqest)
+    ui(new Ui::FactoryReset)
 {
     ui->setupUi(this);
 }
@@ -37,7 +37,7 @@ void FactoryReset::FactoryResetInit()
 void FactoryReset::on_pushButton_clicked()
 {
     this->m_req_id = this->ui->comboBox_id->currentText();
-    this->m_factory_reset->GetReqestDataFromUI(m_req_id);
+    this->m_factory_reset = new HttpClient::FactoryResetHttpReqest(m_req_id, m_factory_reset_url);
     this->m_factory_reset->FactoryReset([&](bool success, QMap<QString, int>sync_domain)
     {
        if(success)

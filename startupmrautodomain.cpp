@@ -3,13 +3,9 @@
 
 StartUpMrAutoDomain::StartUpMrAutoDomain(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::StartUpMrAutoDomain), m_sumad_req(new HttpClient::StartUpMrAutoDomainHttpRequest)
+    ui(new Ui::StartUpMrAutoDomain)
 {
     ui->setupUi(this);
-    connect(m_sumad_req, SIGNAL(SendProNumber(QString)), this, SLOT(onProNum(QString)));
-    connect(m_sumad_req, SIGNAL(SendRequestFinish(QString)), this, SLOT(onRequestFinish(QString)));
-    connect(m_sumad_req, SIGNAL(RequestSuccess(QString)), this, SLOT(onRequestSuccess(QString)));
-    connect(m_sumad_req, SIGNAL(RequestFail(QString)), this, SLOT(onRequestFail(QString)));
 }
 
 StartUpMrAutoDomain::~StartUpMrAutoDomain()
@@ -48,7 +44,7 @@ void StartUpMrAutoDomain::on_pushButton_clicked()
 {
     if(isOpen)
     {
-        this->m_sumad_req->GetReqProNumber(0);
+        this->m_sumad_req = new HttpClient::StartUpMrAutoDomainHttpRequest(0, m_sync_rul);
         this->m_sumad_req->StartUpMrAutoDomain([&](bool success, QMap<QString, int>open_domain)
         {
            if(success)
@@ -68,7 +64,7 @@ void StartUpMrAutoDomain::on_pushButton_clicked()
     }
     else
     {
-        this->m_sumad_req->GetReqProNumber(1);
+        this->m_sumad_req = new HttpClient::StartUpMrAutoDomainHttpRequest(1, m_sync_rul);
         this->m_sumad_req->StartUpMrAutoDomain([&](bool success, QMap<QString, int>open_domain)
         {
            if(success)

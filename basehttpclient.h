@@ -16,23 +16,14 @@
 #include <QByteArray>
 
 #include <QMap>
-
+#include "common.h"
 #include <iostream>
 
 using namespace std;
+using namespace Common;
 
 namespace HttpClient
 {
-    const QString OpenDomainUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString UdpControlUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString SpecMrFactoryResetUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString SyncSpecMrDomainUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString FactoryResetUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString RestartSpecUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString ReadSpecMrInfoUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString WriteSpecMrInfoUrl = QString("http://192.168.32.107:38080/udp/control");
-    const QString GetMrResultData = QString("http://192.168.32.107:38080/udp/data");
-
     typedef struct _WriteSpecMr
     {
         int mmid;
@@ -47,6 +38,7 @@ namespace HttpClient
         int nm;
         int ari;
     }write_spec_mr;
+
 
     class BaseHttpClient : public QObject
     {
@@ -77,16 +69,18 @@ namespace HttpClient
         Q_OBJECT
     public:
         UdpControlServerInfoHttpReq();
+        UdpControlServerInfoHttpReq(QString req_url);
         ~UdpControlServerInfoHttpReq();
         void UdpControlServerInfo(std::function<void(bool, QMap<QString, QVariant>)> callback);
-        void GetReqProNumber(QString req_pro);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
 
     private:
          std::function<void(bool, QMap<QString, QVariant>)> checkCallback;
-         QString m_get_req_pro;
+
+    public:
+         QString M_UDP_COMTROL_RUL;
 
     private:
         UdpControlServerInfoHttpReq(const UdpControlServerInfoHttpReq &);
@@ -99,12 +93,13 @@ namespace HttpClient
         Q_OBJECT
     public:
         StartUpMrAutoDomainHttpRequest();
+        StartUpMrAutoDomainHttpRequest(int req_sync, QString req_url);
         ~StartUpMrAutoDomainHttpRequest();
         void StartUpMrAutoDomain(std::function<void(bool, QMap<QString, int>)> callback);
-        void GetReqProNumber(int req_sync);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+
 
     signals:
         void SendProNumber(QString req_pro);
@@ -113,8 +108,12 @@ namespace HttpClient
         void RequestFail(QString err_info);
 
     private:
-         std::function<void(bool, QMap<QString, int>)> checkCallback;
-         int m_get_req_sync;
+        std::function<void(bool, QMap<QString, int>)> checkCallback;
+
+    public:
+        int m_get_req_sync;
+        QString M_START_UP_RUL;
+
     private:
         StartUpMrAutoDomainHttpRequest(const StartUpMrAutoDomainHttpRequest &);
         const StartUpMrAutoDomainHttpRequest & operator = (const StartUpMrAutoDomainHttpRequest &);
@@ -125,16 +124,19 @@ namespace HttpClient
         Q_OBJECT
     public:
         OpenCloseMrAutoFactoryResetHttpRequest();
+        OpenCloseMrAutoFactoryResetHttpRequest(int req_reset, QString req_url);
         ~OpenCloseMrAutoFactoryResetHttpRequest();
         void OpenCloseMrAutoFactoryReset(std::function<void(bool, QMap<QString, int>)> callback);
-        void GetReqProNumber(int req_reset);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
 
     private:
-         std::function<void(bool, QMap<QString, int>)> checkCallback;
-         int m_get_req_reset;
+        std::function<void(bool, QMap<QString, int>)> checkCallback;
+
+    public:
+        int m_get_req_reset;
+        QString M_OPEN_CLOSE_RUL;
 
     private:
         OpenCloseMrAutoFactoryResetHttpRequest(const OpenCloseMrAutoFactoryResetHttpRequest &);
@@ -146,17 +148,21 @@ namespace HttpClient
         Q_OBJECT
     public:
         SyncSpecMrDomainHttpRequest();
+        SyncSpecMrDomainHttpRequest(QString req_id, QString req_host, QString req_url);
         ~SyncSpecMrDomainHttpRequest();
         void SyncSpecMrDomain(std::function<void(bool, QMap<QString, int>)> callback);
-        void GetReqestDataFromUI(QString req_id, QString req_host);
 
     protected:
-        void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+        void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);     
 
     private:
-         std::function<void(bool, QMap<QString, int>)> checkCallback;
-         QString m_get_req_id;
-         QString m_get_req_host;
+        std::function<void(bool, QMap<QString, int>)> checkCallback;
+
+
+    public:
+        QString m_get_req_id;
+        QString m_get_req_host;
+        QString M_SYNC_RUL;
 
     private:
         SyncSpecMrDomainHttpRequest(const SyncSpecMrDomainHttpRequest &);
@@ -168,37 +174,44 @@ namespace HttpClient
         Q_OBJECT
     public:
         FactoryResetHttpReqest();
+        FactoryResetHttpReqest(QString req_id, QString req_url);
         ~FactoryResetHttpReqest();
         void FactoryReset(std::function<void(bool, QMap<QString, int>)> callback);
-        void GetReqestDataFromUI(QString req_id);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
 
     private:
-         std::function<void(bool, QMap<QString, int>)> checkCallback;
-         QString m_get_req_id;
+        std::function<void(bool, QMap<QString, int>)> checkCallback;
+
+    public:
+        QString m_get_req_id;
+        QString M_FAXTORY_RESET_URL;
 
     private:
         FactoryResetHttpReqest(const FactoryResetHttpReqest &);
         const FactoryResetHttpReqest & operator = (const FactoryResetHttpReqest &);
     };
 
-    class  RestartSpecMrHttpReqest : public BaseHttpClient
+
+    class RestartSpecMrHttpReqest : public BaseHttpClient
     {
         Q_OBJECT
     public:
          RestartSpecMrHttpReqest();
+         RestartSpecMrHttpReqest(QString req_id, QString req_url);
          ~RestartSpecMrHttpReqest();
          void RestartSpecMr(std::function<void(bool, QMap<QString, int>)> callback);
-         void GetReqestDataFromUI(QString req_id);
 
      protected:
-         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);        
 
      private:
           std::function<void(bool, QMap<QString, int>)> checkCallback;
           QString m_get_req_id;
+
+    public:
+          QString M_RESTART_RUL;
 
     private:
          RestartSpecMrHttpReqest(const RestartSpecMrHttpReqest &);
@@ -210,16 +223,19 @@ namespace HttpClient
         Q_OBJECT
     public:
         ReadSpecMrConfigInfoHttpReqest();
+        ReadSpecMrConfigInfoHttpReqest(QString req_id, QString read_url);
         ~ReadSpecMrConfigInfoHttpReqest(); 
         void ReadSpecMrConfigInfo(std::function<void(bool, QMap<QString, QVariant>)> callback);
-        void GetReqestDataFromUI(QString req_pro);
 
     protected:
-        void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+        void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);       
 
     private:
          std::function<void(bool, QMap<QString, QVariant>)> checkCallback;
+
+    public:
          QString m_get_mid;
+         QString M_READ_RUL;
 
     private:
         ReadSpecMrConfigInfoHttpReqest(const ReadSpecMrConfigInfoHttpReqest &);
@@ -239,6 +255,7 @@ namespace HttpClient
 
     public:
         write_spec_mr m_wsmr;
+        QString M_WRITE_RUL;
 
     private:
          std::function<void(bool, QMap<QString, int>)> checkCallback;
@@ -254,11 +271,15 @@ namespace HttpClient
         GetMrReslutHttpReqest();
         ~GetMrReslutHttpReqest();
         void GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback);
+        void httpRequestUrl(QString url);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+
+
     public:
         int m_get_tag_id;
+        QString M_RUL;
 
     private:
          std::function<void(bool, QMap<QString, QVariant>)> checkCallback;

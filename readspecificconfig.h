@@ -23,13 +23,20 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_save_clicked();
+
+    void on_pushButton_cancel_clicked();
+
 public:
     QString m_mid;
     QList<int> m_list_mid;
+    QString m_url;
 
 private:
     Ui::ReadSpecificConfig *ui;
     HttpClient::ReadSpecMrConfigInfoHttpReqest* m_read_spec_mrinfo;
+    HttpClient::WriteSpecMrConfigInfoHttpRequest* m_write_specmr_info;
+
 
 private:
     ReadSpecificConfig(const ReadSpecificConfig &);

@@ -3,7 +3,7 @@
 
 RestartMr::RestartMr(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RestartMr), m_restart_specmr(new HttpClient::RestartSpecMrHttpReqest)
+    ui(new Ui::RestartMr)
 {
     ui->setupUi(this);
 }
@@ -37,7 +37,7 @@ void RestartMr::RestartMrInit()
 void RestartMr::on_pushButton_clicked()
 {
     this->m_req_id = this->ui->comboBox_id->currentText();
-    this->m_restart_specmr->GetReqestDataFromUI(m_req_id);
+    this->m_restart_specmr = new HttpClient::RestartSpecMrHttpReqest(m_req_id, m_restart_url);
     this->m_restart_specmr->RestartSpecMr([&](bool success, QMap<QString, int>restart_specmr)
     {
        if(success)

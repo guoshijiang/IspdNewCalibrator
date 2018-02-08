@@ -29,6 +29,7 @@ private:
 public:
     int m_reset;
     bool isOpen;
+    QString m_open_close_url;
 private:
     StartUpMrAutoFactoryReset(const StartUpMrAutoFactoryReset &);
     const StartUpMrAutoFactoryReset & operator = (const StartUpMrAutoFactoryReset &);

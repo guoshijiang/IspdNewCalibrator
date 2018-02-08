@@ -25,6 +25,7 @@ private slots:
 public:
     QList<int> m_mid;
     QString m_req_id;
+    QString m_factory_reset_url;
 
 private:
     Ui::FactoryReset *ui;

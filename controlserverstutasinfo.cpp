@@ -1,10 +1,8 @@
 ﻿#include "controlserverstutasinfo.h"
 #include "ui_controlserverstutasinfo.h"
 
-ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ControlServerStutasInfo),
-    m_udp_con_svr_info(new HttpClient::UdpControlServerInfoHttpReq)
+ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) : QDialog(parent),
+    ui(new Ui::ControlServerStutasInfo)
 {
     p_area = new QScrollArea();
     p_widget = new QWidget();
@@ -17,7 +15,6 @@ ControlServerStutasInfo::ControlServerStutasInfo(QWidget *parent) :
     m_main_layout = new QVBoxLayout();
     m_main_layout->addWidget(p_area);
     ui->setupUi(this);
-    this->getUdpControl();
 }
 
 ControlServerStutasInfo::~ControlServerStutasInfo()
@@ -87,12 +84,13 @@ void ControlServerStutasInfo::CSSInfoStart()
 {
     this->setWindowIcon(QIcon(":/UDP.png"));
     this->setWindowTitle(QString::fromLocal8Bit("获取UDP控制服务状态信息"));
+    this->getUdpControl();
     this->showNormal();
 }
 
 void ControlServerStutasInfo::getUdpControl()
 {
-    this->m_udp_con_svr_info->GetReqProNumber(m_req_pro);
+    this->m_udp_con_svr_info = new HttpClient::UdpControlServerInfoHttpReq(m_udp_control_url);
     this->m_udp_con_svr_info->UdpControlServerInfo([&](bool success, QMap<QString, QVariant> udp_svr_data)
     {
        if(success)

@@ -46,6 +46,11 @@ namespace HttpClient
 
     }
 
+    UdpControlServerInfoHttpReq::UdpControlServerInfoHttpReq(QString req_url)
+    {
+        this->M_UDP_COMTROL_RUL = req_url;
+    }
+
     UdpControlServerInfoHttpReq::~UdpControlServerInfoHttpReq()
     {
 
@@ -53,17 +58,14 @@ namespace HttpClient
 
     void UdpControlServerInfoHttpReq::UdpControlServerInfo(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString url = UdpControlUrl;
+        qDebug() << "M_UDP_COMTROL_RUL = " << M_UDP_COMTROL_RUL;
+        QString url = M_UDP_COMTROL_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1005);
+        obj.insert("pro", SEVER_STATUS_INFO);
         this->post(url, QJsonDocument(obj).toJson());
     }
 
-    void UdpControlServerInfoHttpReq::GetReqProNumber(QString req_pro)
-    {
-         this->m_get_req_pro = req_pro;
-    }
 
     void UdpControlServerInfoHttpReq::requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode)
     {
@@ -157,21 +159,23 @@ namespace HttpClient
 
     }
 
+    StartUpMrAutoDomainHttpRequest::StartUpMrAutoDomainHttpRequest(int req_sync, QString req_url)
+    {
+        this->m_get_req_sync = req_sync;
+        this->M_START_UP_RUL = req_url;
+    }
+
     StartUpMrAutoDomainHttpRequest::~StartUpMrAutoDomainHttpRequest()
     {
 
     }
-    void StartUpMrAutoDomainHttpRequest::GetReqProNumber(int req_sync)
-    {
-        this->m_get_req_sync = req_sync;
-    }
 
     void StartUpMrAutoDomainHttpRequest::StartUpMrAutoDomain(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = OpenDomainUrl;
+        QString url = M_START_UP_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1006);
+        obj.insert("pro", SET_SERVER_AUTO_SYSNC_FUNC);
         qDebug() << "request::" << this->m_get_req_sync;
         obj.insert("sync", this->m_get_req_sync);
         this->post(url, QJsonDocument(obj).toJson());
@@ -214,22 +218,23 @@ namespace HttpClient
 
     }
 
+    OpenCloseMrAutoFactoryResetHttpRequest::OpenCloseMrAutoFactoryResetHttpRequest(int req_reset, QString req_url)
+    {
+        this->m_get_req_reset = req_reset;
+        this->M_OPEN_CLOSE_RUL = req_url;
+    }
+
     OpenCloseMrAutoFactoryResetHttpRequest::~OpenCloseMrAutoFactoryResetHttpRequest()
     {
 
     }
 
-    void OpenCloseMrAutoFactoryResetHttpRequest::GetReqProNumber(int req_reset)
-    {
-        this->m_get_req_reset = req_reset;
-    }
-
     void OpenCloseMrAutoFactoryResetHttpRequest::OpenCloseMrAutoFactoryReset(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = SpecMrFactoryResetUrl;
+        QString url = M_OPEN_CLOSE_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1007);
+        obj.insert("pro", SET_SERVER_MR_AUTO_FACTORYSET);
         obj.insert("reset", this->m_get_req_reset);
         this->post(url, QJsonDocument(obj).toJson());
     }
@@ -271,23 +276,24 @@ namespace HttpClient
 
     }
 
+    SyncSpecMrDomainHttpRequest::SyncSpecMrDomainHttpRequest(QString req_id, QString req_host, QString req_url)
+    {
+        this->m_get_req_id  = req_id;
+        this->m_get_req_host = req_host;
+        this->M_SYNC_RUL = req_url;
+    }
+
     SyncSpecMrDomainHttpRequest::~SyncSpecMrDomainHttpRequest()
     {
 
     }
 
-    void SyncSpecMrDomainHttpRequest::GetReqestDataFromUI(QString req_id, QString req_host)
-    {
-        this->m_get_req_id  = req_id;
-        this->m_get_req_host = req_host;
-    }
-
     void SyncSpecMrDomainHttpRequest::SyncSpecMrDomain(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = SyncSpecMrDomainUrl;
+        QString url = M_SYNC_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1008);
+        obj.insert("pro", UPDATE_SPEC_MR_SERVER_DOMAIN);
         obj.insert("mid", this->m_get_req_id.toInt());
         obj.insert("domain", this->m_get_req_host);
         this->post(url, QJsonDocument(obj).toJson());
@@ -339,22 +345,23 @@ namespace HttpClient
 
     }
 
+    FactoryResetHttpReqest::FactoryResetHttpReqest(QString req_id, QString req_url)
+    {
+        this->m_get_req_id = req_id;
+        this->M_FAXTORY_RESET_URL = req_url;
+    }
+
     FactoryResetHttpReqest::~FactoryResetHttpReqest()
     {
 
     }
 
-    void FactoryResetHttpReqest::GetReqestDataFromUI(QString req_id)
-    {
-        this->m_get_req_id  = req_id;
-    }
-
     void FactoryResetHttpReqest::FactoryReset(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = FactoryResetUrl;
+        QString url = M_FAXTORY_RESET_URL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1009);
+        obj.insert("pro", SET_SPEC_MR_FACTORYSET);
         obj.insert("mid", this->m_get_req_id.toInt());
         this->post(url, QJsonDocument(obj).toJson());
     }
@@ -396,22 +403,23 @@ namespace HttpClient
 
     }
 
+    RestartSpecMrHttpReqest::RestartSpecMrHttpReqest(QString req_id, QString req_url)
+    {
+        this->m_get_req_id  = req_id;
+        this->M_RESTART_RUL = req_url;
+    }
+
     RestartSpecMrHttpReqest::~RestartSpecMrHttpReqest()
     {
 
     }
 
-    void RestartSpecMrHttpReqest::GetReqestDataFromUI(QString req_id)
-    {
-        this->m_get_req_id  = req_id;
-    }
-
     void RestartSpecMrHttpReqest::RestartSpecMr(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = RestartSpecUrl;
+        QString url = M_RESTART_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1010);
+        obj.insert("pro", RESTART_SPEC_MR);
         obj.insert("mid",this->m_get_req_id.toInt());
         this->post(url, QJsonDocument(obj).toJson());
     }
@@ -453,22 +461,23 @@ namespace HttpClient
 
     }
 
+    ReadSpecMrConfigInfoHttpReqest::ReadSpecMrConfigInfoHttpReqest(QString req_id, QString read_url)
+    {
+        this->m_get_mid = req_id;
+        this->M_READ_RUL = read_url;
+    }
+
     ReadSpecMrConfigInfoHttpReqest::~ReadSpecMrConfigInfoHttpReqest()
     {
 
     }
 
-    void ReadSpecMrConfigInfoHttpReqest::GetReqestDataFromUI(QString mid)
-    {
-        this->m_get_mid = mid;
-    }
-
     void ReadSpecMrConfigInfoHttpReqest::ReadSpecMrConfigInfo(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString url = ReadSpecMrInfoUrl;
+        QString url = this->M_READ_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1011);
+        obj.insert("pro", READ_SPEC_MR_INFO);
         obj.insert("mid", this->m_get_mid.toInt());
         this->post(url, QJsonDocument(obj).toJson());
     }
@@ -701,10 +710,10 @@ namespace HttpClient
 
     void WriteSpecMrConfigInfoHttpRequest::WriteSpecMrConfigInfo(std::function<void(bool, QMap<QString, int>)> callback)
     {
-        QString url = WriteSpecMrInfoUrl;
+        QString url = M_WRITE_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 1012);
+        obj.insert("pro", WRITE_SPEC_MR_CONFIG);
         obj.insert("mid", m_wsmr.mmid);
         obj.insert("lip", m_wsmr.lip);
         obj.insert("nip", m_wsmr.nip);
@@ -759,12 +768,17 @@ namespace HttpClient
 
     }
 
+    void GetMrReslutHttpReqest::httpRequestUrl(QString url)
+    {
+        this->M_RUL = url;
+    }
+
     void GetMrReslutHttpReqest::GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
-        QString url = GetMrResultData;
+        QString url = this->M_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
-        obj.insert("pro", 2005);
+        obj.insert("pro", JZ_DATA_CODE);
         obj.insert("id", 10010013);
         this->post(url, QJsonDocument(obj).toJson());
     }

@@ -37,14 +37,16 @@ MainWindow::MainWindow(QWidget *parent) :
     m_bc_work->moveToThread(m_thread);
     connect(this, &MainWindow::startWork, m_bc_work, &BroadCastWorker::UdpBoardCast);
 
+
+    connect(m_bc_work, SIGNAL(sendServerBoardCastMsg(QByteArray, QString)), this, SLOT(onSeverBoardCastMsg(QByteArray, QString)));
+
+
     this->ui->groupBox_record->setStyleSheet("QGroupBox {background:#e7a16b}");
     this->ui->comboBox_com->setStyleSheet("QComboBox {background:#e7a16b}");
     this->ui->lineEdit_id->setStyleSheet("QLineEdit {background:#e7a16b}");
     this->ui->record_status->setStyleSheet("QLabel {background:#e7a16b}");
 
-    fontSet();  //界面字体初始化
-
-    this->getServerConfigInfo();
+    this->fontSet();  //界面字体初始化
 
     this->m_com_list.clear();
     for (int i=0; i < m_serial_port->m_set_len; i++)
@@ -180,9 +182,91 @@ MainWindow::~MainWindow()
         this->m_udp_con_svr_info = NULL;
     }
 
-    this->m_bc_work->setStop(true);
-    this->m_thread->quit();
-    this->m_thread->wait();
+    //this->m_bc_work->setStop(true);
+    //this->m_thread->quit();
+    //this->m_thread->wait();
+}
+
+void MainWindow::onSeverBoardCastMsg(const QByteArray &msg, QString serverIP)
+{
+    this->ui->textEdit_log->append(msg);
+    this->ui->textEdit_log->append(serverIP);
+    M_IP = serverIP.right(14);
+    QString httpReqDataUrl = HTTP_PREDIX + M_IP + ":" + HTTP_REQEST_PORT + UDP_DATA;
+    QString setReqUrl = HTTP_PREDIX + M_IP + ":" + HTTP_REQEST_PORT + UDP_CONTROL;
+
+    if(this->m_mr_result->M_RUL.isEmpty())
+    {
+        this->m_mr_result->httpRequestUrl(httpReqDataUrl);
+    }
+    else
+    {
+        qDebug() << "httpReqDataUrl: " << httpReqDataUrl;
+    }
+
+    if(this->m_udp_con_svr_info->M_UDP_COMTROL_RUL.isEmpty())
+    {
+        this->m_udp_con_svr_info->M_UDP_COMTROL_RUL = setReqUrl;
+        this->getServerConfigInfo();
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_rsc_config->m_url.isEmpty())
+    {
+        this->m_rsc_config->m_url = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_restart_spec_mr->m_restart_url.isEmpty())
+    {
+        this->m_restart_spec_mr->m_restart_url = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_factory_reset->m_factory_reset_url.isEmpty())
+    {
+        this->m_factory_reset->m_factory_reset_url = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_start_mr_auto_freset->m_open_close_url.isEmpty())
+    {
+        this->m_start_mr_auto_freset->m_open_close_url = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_start_mr_auto_domain->m_sync_rul.isEmpty())
+    {
+        this->m_start_mr_auto_domain->m_sync_rul = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
+
+    if(this->m_css_info->m_udp_control_url.isEmpty())
+    {
+        this->m_css_info->m_udp_control_url = setReqUrl;
+    }
+    else
+    {
+        qDebug() << "setReqUrl: " << setReqUrl;
+    }
 }
 
 void MainWindow::VersionSlot()
@@ -318,7 +402,7 @@ void MainWindow::start()
 {
     if(m_thread->isRunning())
     {
-       //return ;
+       return ;
     }
 
     m_thread->start();

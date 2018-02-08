@@ -25,6 +25,7 @@ private slots:
 public:
     QString m_req_id;
     QList<int> m_mid;
+    QString m_restart_url;
 
 private:
     Ui::RestartMr *ui;

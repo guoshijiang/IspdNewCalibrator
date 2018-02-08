@@ -2,8 +2,8 @@
 #include "ui_readspecificconfig.h"
 
 ReadSpecificConfig::ReadSpecificConfig(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ReadSpecificConfig), m_read_spec_mrinfo(new HttpClient::ReadSpecMrConfigInfoHttpReqest)
+    QDialog(parent), ui(new Ui::ReadSpecificConfig),
+    m_write_specmr_info(new HttpClient::WriteSpecMrConfigInfoHttpRequest)
 {
     ui->setupUi(this);
 }
@@ -11,7 +11,7 @@ ReadSpecificConfig::ReadSpecificConfig(QWidget *parent) :
 ReadSpecificConfig::~ReadSpecificConfig()
 {
     delete ui;
-    if(this->m_read_spec_mrinfo != NULL)
+    if(m_read_spec_mrinfo != NULL)
     {
         delete this->m_read_spec_mrinfo;
         this->m_read_spec_mrinfo = NULL;
@@ -37,7 +37,7 @@ void ReadSpecificConfig::ReadSpecConfig_start()
 void ReadSpecificConfig::on_pushButton_clicked()
 {
     this->m_mid = this->ui->comboBox_id->currentText();
-    this->m_read_spec_mrinfo->GetReqestDataFromUI(m_mid);
+    m_read_spec_mrinfo = new HttpClient::ReadSpecMrConfigInfoHttpReqest(m_mid, m_url);
     this->m_read_spec_mrinfo->ReadSpecMrConfigInfo([&](bool success, QMap<QString, QVariant>read_sepc_mr)
     {
        if(success)
@@ -69,4 +69,44 @@ void ReadSpecificConfig::on_pushButton_clicked()
            }
        }
     });
+}
+
+void ReadSpecificConfig::on_pushButton_save_clicked()
+{
+    this->m_write_specmr_info->m_wsmr.mmid = this->ui->lineEdit_rep_goal_id->text().toInt();
+
+    this->m_write_specmr_info->m_wsmr.lip = this->ui->lineEdit_rep_j_ip->text();
+    this->m_write_specmr_info->m_wsmr.nip = this->ui->lineEdit_rep_j_zip->text();
+    this->m_write_specmr_info->m_wsmr.gip = this->ui->lineEdit_rep_j_gateway->text();
+    this->m_write_specmr_info->m_wsmr.dip = this->ui->lineEdit_rep_j_dip->text();
+    this->m_write_specmr_info->m_wsmr.domain = this->ui->lineEdit_server_yuming->text();
+
+    this->m_write_specmr_info->m_wsmr.tp = this->ui->lineEdit_rep_tp->text().toInt();
+    this->m_write_specmr_info->m_wsmr.up = this->ui->lineEdit_rep_up->text().toInt();
+
+    this->m_write_specmr_info->m_wsmr.version = this->ui->lineEdit_rep_ver->text();
+
+    this->m_write_specmr_info->m_wsmr.nm = this->ui->lineEdit_rep_network_select->text().toInt();
+    this->m_write_specmr_info->m_wsmr.ari = this->ui->lineEdit_rep_time->text().toInt();
+
+    this->m_write_specmr_info->M_WRITE_RUL = m_url;
+    this->m_write_specmr_info->WriteSpecMrConfigInfo([&](bool success, QMap<QString, int>write_pecmr)
+    {
+       if(success)
+       {
+           if(write_pecmr["ec"] == 0)
+           {
+               this->ui->textEdit_status->append(QString::fromLocal8Bit("写指定终端配置信息成功"));
+           }
+           else
+           {
+               this->ui->textEdit_status->append(QString::fromLocal8Bit("写指定终端配置信息失败"));
+           }
+       }
+    });
+}
+
+void ReadSpecificConfig::on_pushButton_cancel_clicked()
+{
+    this->close();
 }

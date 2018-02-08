@@ -49,9 +49,6 @@ private:
     Ui::ControlServerStutasInfo* ui;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
 public:
-    /***************************/
-    /*界面相关的变量              */
-    /***************************/
     QScrollArea *p_area;
     QWidget *p_widget;
     QVBoxLayout *m_vbox_layout;
@@ -61,10 +58,7 @@ public:
     QLineEdit *m_ledit;
     QLabel *m_label;
 
-    /***************************/
-    /*HTTP请求相关的变量          */
-    /***************************/
-    QString m_req_pro;
+    QString m_udp_control_url;
 private:
     ControlServerStutasInfo(const ControlServerStutasInfo &);
     const ControlServerStutasInfo & operator = (const ControlServerStutasInfo &);

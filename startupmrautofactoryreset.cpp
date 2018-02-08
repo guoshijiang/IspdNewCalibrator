@@ -3,7 +3,7 @@
 
 StartUpMrAutoFactoryReset::StartUpMrAutoFactoryReset(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::StartUpMrAutoFactoryReset), m_oc_mr_auto_freset(new HttpClient::OpenCloseMrAutoFactoryResetHttpRequest)
+    ui(new Ui::StartUpMrAutoFactoryReset)
 {
     ui->setupUi(this);
 }
@@ -46,7 +46,7 @@ void StartUpMrAutoFactoryReset::on_pushButton_clicked()
 {
     if(isOpen)
     {
-        this->m_oc_mr_auto_freset->GetReqProNumber(0);
+        this->m_oc_mr_auto_freset = new HttpClient::OpenCloseMrAutoFactoryResetHttpRequest(0, m_open_close_url);
         this->m_oc_mr_auto_freset->OpenCloseMrAutoFactoryReset([&](bool success, QMap<QString, int>ocmfr_freset)
         {
            if(success)
@@ -66,7 +66,7 @@ void StartUpMrAutoFactoryReset::on_pushButton_clicked()
     }
     else
     {
-        this->m_oc_mr_auto_freset->GetReqProNumber(1);
+        this->m_oc_mr_auto_freset = new HttpClient::OpenCloseMrAutoFactoryResetHttpRequest(1, m_open_close_url);
         this->m_oc_mr_auto_freset->OpenCloseMrAutoFactoryReset([&](bool success, QMap<QString, int>ocmfr_freset)
         {
            if(success)
@@ -84,6 +84,5 @@ void StartUpMrAutoFactoryReset::on_pushButton_clicked()
         isOpen = true;
         this->ui->pushButton->setText(UTF8BIT("关闭"));
     }
-
 }
 

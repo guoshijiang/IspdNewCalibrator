@@ -34,6 +34,7 @@ public:
     QString m_req_pro;
     int m_sync;
     bool isOpen;
+    QString m_sync_rul;
 
 private:
     Ui::StartUpMrAutoDomain *ui;

@@ -756,7 +756,6 @@
     <addaction name="action_reset_specmr"/>
     <addaction name="separator"/>
     <addaction name="action_read_speconfig"/>
-    <addaction name="action_write_speconfig"/>
    </widget>
    <widget class="QMenu" name="menu_6">
     <property name="title">
@@ -796,7 +795,6 @@
    <addaction name="separator"/>
    <addaction name="action_read_speconfig"/>
    <addaction name="separator"/>
-   <addaction name="action_write_speconfig"/>
    <addaction name="separator"/>
    <addaction name="action_udp_server_info"/>
    <addaction name="separator"/>

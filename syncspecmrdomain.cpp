@@ -34,7 +34,6 @@ void SyncSpecMrDomain::on_pushButton_clicked()
 {
     this->m_req_id = this->ui->lineEdit_req_id->text();
     this->m_req_host = this->ui->lineEdit_req_host->text();
-    this->m_sync_specmr_domain->GetReqestDataFromUI(m_req_id, m_req_host);
     this->m_sync_specmr_domain->SyncSpecMrDomain([&](bool success, QMap<QString, int>sync_domain)
     {
        if(success)
