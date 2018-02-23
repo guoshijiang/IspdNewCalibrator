@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QString>
 #include "basehttpclient.h"
+#include "common.h"
 
 namespace Ui {
 class RestartMr;
@@ -30,6 +31,7 @@ public:
 private:
     Ui::RestartMr *ui;
     HttpClient::RestartSpecMrHttpReqest* m_restart_specmr;
+    Common::HandleError *m_handle_err;
 
 private:
     RestartMr(const RestartMr &);

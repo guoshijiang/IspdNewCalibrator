@@ -53,6 +53,12 @@
             </item>
             <item>
              <widget class="QLabel" name="record_status">
+              <property name="minimumSize">
+               <size>
+                <width>300</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="font">
                <font>
                 <pointsize>30</pointsize>
@@ -120,7 +126,7 @@
            <widget class="QGroupBox" name="groupBox_5">
             <property name="font">
              <font>
-              <pointsize>25</pointsize>
+              <pointsize>15</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -771,39 +777,6 @@
    <addaction name="menu_6"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="action_newfile"/>
-   <addaction name="separator"/>
-   <addaction name="action_openfile"/>
-   <addaction name="separator"/>
-   <addaction name="action_eixit"/>
-   <addaction name="separator"/>
-   <addaction name="action_record"/>
-   <addaction name="separator"/>
-   <addaction name="action_com"/>
-   <addaction name="separator"/>
-   <addaction name="action_serialport_set"/>
-   <addaction name="separator"/>
-   <addaction name="action_read_speconfig"/>
-   <addaction name="separator"/>
-   <addaction name="separator"/>
-   <addaction name="action_udp_server_info"/>
-   <addaction name="separator"/>
-   <addaction name="action_doc"/>
-   <addaction name="separator"/>
-   <addaction name="action_question"/>
-   <addaction name="separator"/>
-   <addaction name="action_version"/>
-  </widget>
   <action name="action_newfile">
    <property name="icon">
     <iconset resource="resource.qrc">

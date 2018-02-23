@@ -32,7 +32,7 @@ void Version::ver_start()
 
 void Version::ver_init()
 {
-    this->m_ver_str = QString::fromLocal8Bit("软件当前版本为V1.0.0");
+    this->m_ver_str = QString::fromLocal8Bit("软件当前版本为V2.0.1");
     QString ver_info = MESSAGE_RED +m_ver_str+ MESSAGE_END;
     this->ui->label_current_ver->setText(ver_info);
 }

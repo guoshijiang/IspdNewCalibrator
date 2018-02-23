@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVariant>
 #include "basehttpclient.h"
+#include "common.h"
 
 namespace Ui {
 class ReadSpecificConfig;
@@ -36,7 +37,7 @@ private:
     Ui::ReadSpecificConfig *ui;
     HttpClient::ReadSpecMrConfigInfoHttpReqest* m_read_spec_mrinfo;
     HttpClient::WriteSpecMrConfigInfoHttpRequest* m_write_specmr_info;
-
+    Common::HandleError *m_handle_err;
 
 private:
     ReadSpecificConfig(const ReadSpecificConfig &);

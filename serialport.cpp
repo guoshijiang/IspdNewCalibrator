@@ -177,6 +177,13 @@ int SerialPort::readData(char *msg, int msg_len)
         PurgeComm(this->m_hle_comm, PURGE_RXCLEAR | PURGE_RXABORT);
         return -1;
     }
+
+    for(size_t i = 0; i < sizeof((char*)buf); ++i )
+    {
+       printf(" %02X", (char*)buf[i]);
+    }
+
+
     memcpy(msg, buf, msg_len);
     return 0;
 }

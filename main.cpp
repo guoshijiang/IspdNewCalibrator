@@ -23,7 +23,7 @@ QFile* global_log_file = NULL;
 
 const int MAX_BUF_LEN = 255;
 
-static void logMessageHandler(QtMsgType type, const QMessageLogContext &msgContext, const QString & msg)
+static void logMessageHandler(QtMsgType type, const QMessageLogContext & msgContext, const QString & msg)
 {
     QString txt;
     QDateTime date;
@@ -67,8 +67,8 @@ int main(int argc, char *argv[])
     global_log_file = new QFile(logFileName);
     if (!global_log_file->open(QIODevice::WriteOnly | QIODevice::Text))
     {
-        delete global_log_file;
-        global_log_file = NULL;
+         delete global_log_file;
+         global_log_file = NULL;
     }
     //qInstallMessageHandler(logMessageHandler);
 

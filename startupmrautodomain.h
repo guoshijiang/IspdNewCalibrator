@@ -39,6 +39,7 @@ public:
 private:
     Ui::StartUpMrAutoDomain *ui;
     HttpClient::StartUpMrAutoDomainHttpRequest *m_sumad_req;
+    Common::HandleError* m_handle_err;
 
 private:
     StartUpMrAutoDomain(const StartUpMrAutoDomain &);

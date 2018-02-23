@@ -39,7 +39,6 @@ namespace HttpClient
         int ari;
     }write_spec_mr;
 
-
     class BaseHttpClient : public QObject
     {
         Q_OBJECT
@@ -272,10 +271,10 @@ namespace HttpClient
         ~GetMrReslutHttpReqest();
         void GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback);
         void httpRequestUrl(QString url);
+        void getIDFromUI(int id);
 
     protected:
         void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
-
 
     public:
         int m_get_tag_id;

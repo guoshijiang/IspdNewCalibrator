@@ -48,6 +48,8 @@ private slots:
 private:
     Ui::ControlServerStutasInfo* ui;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
+    Common::HandleError* m_handle_err;
+
 public:
     QScrollArea *p_area;
     QWidget *p_widget;

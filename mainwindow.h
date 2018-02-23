@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSerialPort>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -30,10 +31,13 @@
 #include <QByteArray>
 #include <QToolBox>
 #include <QTimer>
+#include <QDateTime>
 #include <QMessageBox>
 #include <QPalette>
 #include <QThread>
 #include <QRegExp>
+#include <QSerialPortInfo>
+#include <QDir>
 
 #include "version.h"
 #include "question.h"
@@ -95,6 +99,15 @@ public:
     void fontSet();
     void getServerConfigInfo();
 
+    int OpenPort();
+    int ClosePort();
+
+    int EnterConfig();
+    int ExitConfig();
+    int GetIdHzVersion();
+    int ReadHeartRate();
+    int GetSensorData();
+
 public slots:
     void VersionSlot();
     void QuestionSlot();
@@ -112,6 +125,8 @@ public slots:
     void onSeverBoardCastMsg(const QByteArray &msg, QString serverIP);
     void onRecordSuccLogMsg(const QString & msg);
     void onRecordFailMsg(const QString & msg);
+
+    void onSerialPortRead();
 
 public:
     Ui::MainWindow *ui;
@@ -132,9 +147,11 @@ public:
 
     HttpClient::GetMrReslutHttpReqest* m_mr_result;
     HttpClient::UdpControlServerInfoHttpReq* m_udp_con_svr_info;
+    Common::HandleError *m_handle_err;
 
     SerialPortWriteRead* m_sport_wr;
     SerialPort *m_serial_port;
+    Encrypt *m_encrypt;
 
     QVBoxLayout *m_vbox_layout;
     QVBoxLayout *m_main_layout;
@@ -156,6 +173,12 @@ public:
     QList<int> m_con_mid;
 
     QString M_IP;
+    QSerialPort m_spt;
+    QString m_log_succ;
+    QString m_handle_log_succ;
+
+    QString m_log_error;
+    QString m_handle_log_error;
 
 signals:
     void startWork();

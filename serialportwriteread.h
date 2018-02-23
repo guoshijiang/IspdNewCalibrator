@@ -72,9 +72,16 @@ public:
     IdVerHz m_id_ver_hz;
     QString m_com_name;
 
-    QString m_ispd_id;
     QString m_fail_log;
     QString m_succ_log;
+
+    //标签，采样率，版本号
+    QString m_ispd_id;
+    QString m_hz_lv;
+    QString m_ver_xgt;
+
+    //用于http请求的id
+    int m_http_req_id;
 
 private:
     SerialPortWriteRead(const SerialPortWriteRead &);

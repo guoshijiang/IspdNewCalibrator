@@ -3,7 +3,7 @@
 
 StartUpMrAutoFactoryReset::StartUpMrAutoFactoryReset(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::StartUpMrAutoFactoryReset)
+    ui(new Ui::StartUpMrAutoFactoryReset), m_handle_err(new Common::HandleError)
 {
     ui->setupUi(this);
 }
@@ -15,6 +15,12 @@ StartUpMrAutoFactoryReset::~StartUpMrAutoFactoryReset()
     {
         delete this->m_oc_mr_auto_freset;
         this->m_oc_mr_auto_freset = NULL;
+    }
+
+    if(this->m_handle_err != NULL)
+    {
+        delete this->m_handle_err;
+        this->m_handle_err = NULL;
     }
 }
 
@@ -53,11 +59,15 @@ void StartUpMrAutoFactoryReset::on_pushButton_clicked()
            {
                if(ocmfr_freset["ec"] == 0)
                {
-                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功"));
+                   QString succ_log = QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功");
+                   QString succ_log_msg = MESSAGE_SUC + succ_log + MESSAGE_END;
+                   this->ui->textEdit_status->append(succ_log_msg);
                }
                else
                {
-                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态"));
+                   this->m_handle_err->HandleHttpReqError(ocmfr_freset["ec"]);
+                   QString log = this->m_handle_err->m_http_req_error;
+                   this->ui->textEdit_status->append(log);
                }
            }
         });
@@ -73,11 +83,15 @@ void StartUpMrAutoFactoryReset::on_pushButton_clicked()
            {
                if(ocmfr_freset["ec"] == 0)
                {
-                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功"));
+                   QString succ_log = QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态成功");
+                   QString succ_log_msg = MESSAGE_SUC + succ_log + MESSAGE_END;
+                   this->ui->textEdit_status->append(succ_log_msg);
                }
                else
                {
-                   this->ui->textEdit_status->append(QString::fromLocal8Bit("设置控制服务终端自动恢复出厂设置状态"));
+                   this->m_handle_err->HandleHttpReqError(ocmfr_freset["ec"]);
+                   QString log = this->m_handle_err->m_http_req_error;
+                   this->ui->textEdit_status->append(log);
                }
            }
         });

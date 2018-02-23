@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QString>
 #include "basehttpclient.h"
+#include "common.h"
 
 namespace Ui {
 class FactoryReset;
@@ -30,6 +31,7 @@ public:
 private:
     Ui::FactoryReset *ui;
     HttpClient::FactoryResetHttpReqest *m_factory_reset;
+    Common::HandleError* m_handle_err;
 
 private:
     FactoryReset(const FactoryReset &);

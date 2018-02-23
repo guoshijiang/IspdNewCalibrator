@@ -26,6 +26,8 @@ private slots:
 private:
     Ui::StartUpMrAutoFactoryReset *ui;
     HttpClient::OpenCloseMrAutoFactoryResetHttpRequest* m_oc_mr_auto_freset;
+    Common::HandleError* m_handle_err;
+
 public:
     int m_reset;
     bool isOpen;

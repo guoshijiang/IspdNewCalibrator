@@ -3,7 +3,7 @@
 
 FactoryReset::FactoryReset(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FactoryReset)
+    ui(new Ui::FactoryReset), m_handle_err(new Common::HandleError)
 {
     ui->setupUi(this);
 }
@@ -15,6 +15,12 @@ FactoryReset::~FactoryReset()
     {
         delete this->m_factory_reset;
         this->m_factory_reset = NULL;
+    }
+
+    if(this->m_handle_err != NULL)
+    {
+        delete this->m_handle_err;
+        this->m_handle_err = NULL;
     }
 }
 
@@ -44,11 +50,16 @@ void FactoryReset::on_pushButton_clicked()
        {
            if(sync_domain["ec"] == 0)
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("恢复指定终端出厂设置成功，终端ID为:") + this->m_req_id);
+               QString succ_log = QString::fromLocal8Bit("恢复指定终端出厂设置成功，终端ID为:") + this->m_req_id;
+               QString succ_log_msg = MESSAGE_SUC + succ_log + MESSAGE_END;
+               this->ui->textEdit_status->append(succ_log_msg);
            }
            else
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("恢复指定终端出厂设置失败, 终端ID为:") + this->m_req_id);
+               this->m_handle_err->HandleHttpReqError(sync_domain["ec"]);
+               QString log = this->m_handle_err->m_http_req_error;
+               QString id_str = MESSAGE_RED + this->m_req_id + MESSAGE_END;
+               this->ui->textEdit_status->append(log + id_str);
            }
        }
     });

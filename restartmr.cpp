@@ -2,8 +2,8 @@
 #include "ui_restartmr.h"
 
 RestartMr::RestartMr(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::RestartMr)
+    QDialog(parent), ui(new Ui::RestartMr),
+    m_handle_err(new Common::HandleError)
 {
     ui->setupUi(this);
 }
@@ -15,6 +15,12 @@ RestartMr::~RestartMr()
     {
         delete this->m_restart_specmr;
         this->m_restart_specmr = NULL;
+    }
+
+    if(this->m_handle_err != NULL)
+    {
+        delete this->m_handle_err;
+        this->m_handle_err = NULL;
     }
 }
 
@@ -42,13 +48,18 @@ void RestartMr::on_pushButton_clicked()
     {
        if(success)
        {
-           if(restart_specmr["ec"] == 0)
+           if(restart_specmr["ec"] == SUCCESS_CODE)
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("重启指定终端成功，终端ID为:") + this->m_req_id);
+               QString succ_log = QString::fromLocal8Bit("重启指定终端成功，终端ID为:") + this->m_req_id;
+               QString succ_log_msg = MESSAGE_SUC + succ_log + MESSAGE_END;
+               this->ui->textEdit_status->append(succ_log_msg);
            }
            else
            {
-               this->ui->textEdit_status->append(QString::fromLocal8Bit("重启指定终端失败, 终端ID为:") + this->m_req_id);
+               this->m_handle_err->HandleHttpReqError(restart_specmr["ec"]);
+               QString log = this->m_handle_err->m_http_req_error;
+               QString id_str = MESSAGE_RED + this->m_req_id + MESSAGE_END;
+               this->ui->textEdit_status->append(log + id_str);
            }
        }
     });

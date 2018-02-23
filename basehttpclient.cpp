@@ -773,13 +773,18 @@ namespace HttpClient
         this->M_RUL = url;
     }
 
+    void GetMrReslutHttpReqest::getIDFromUI(int id)
+    {
+        this->m_get_tag_id = id;
+    }
+
     void GetMrReslutHttpReqest::GetMrResult(std::function<void(bool, QMap<QString, QVariant>)> callback)
     {
         QString url = this->M_RUL;
         this->checkCallback = callback;
         QJsonObject obj;
         obj.insert("pro", JZ_DATA_CODE);
-        obj.insert("id", 10010013);
+        obj.insert("id", this->m_get_tag_id);
         this->post(url, QJsonDocument(obj).toJson());
     }
 
